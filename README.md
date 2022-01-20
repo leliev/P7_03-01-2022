@@ -1,4 +1,4 @@
---SETUP--
+<h2 style=":center">--SETUP--</h2>
 -First set up your database<br>
 -Create .env file at server folder root and set it up as follow:<br>
 <ul>
