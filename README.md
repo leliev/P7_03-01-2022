@@ -1,4 +1,4 @@
-<h1>Groupomania<h1>
+<h1>Groupomania</h1>
 7th project of openclassroom web dev course
 <h2>--SETUP--</h2>
 -First set up your database<br>
