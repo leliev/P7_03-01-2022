@@ -1,7 +1,9 @@
-            --SETUP--
--First set up your database
--Create .env file at server folder root and set it up as follow:
-    PORT=(server port)
+--SETUP--
+-First set up your database<br>
+-Create .env file at server folder root and set it up as follow:<br>
+<ul>
+    <li>PORT=(server port)</li>
+</ul>
     CLIENT_PORT
     DB_HOST
     DB_USER
