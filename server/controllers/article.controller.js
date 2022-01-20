@@ -1,8 +1,9 @@
+const Sequelize  = require("sequelize");
 const db = require("../models");
 const Article = db.article;
 const User = db.user;
-const Likes = db.like;
-const Comments = db.comment;
+const Like = db.like;
+const Comment = db.comment;
 
 exports.createArticle = (req, res) => {
   const userId = req.body.id;
@@ -23,7 +24,7 @@ exports.createArticle = (req, res) => {
         };
         Article.create({...article})
           .then(article => {
-            Likes.create({articleId: article.id})
+            Like.create({articleId: article.id})
               .then(() => {
                   res.status(200).send({message: "Article created"});
               }).catch(err => {
@@ -47,8 +48,14 @@ exports.createArticle = (req, res) => {
 
 exports.getAllArticles = (req, res) => {
     Article.findAll({
-        include: [Likes, Comments],
-        attributes: ["id", "title", "content", "author"]
+        include: [
+          {model: Like, attributes:["id", "value"]},
+          {model: Comment, attributes: []}
+        ],
+        attributes: {
+          include: [[Sequelize.fn('COUNT', Sequelize.col('comments.articleId')), 'commentCount']]
+        },
+        group: ['comments.articleId']
     }).then(articleList => {
         if (articleList.length === 0 || !articleList) {
             res.status(200).send({ message: "No articles to display"} )
@@ -66,8 +73,13 @@ exports.getAllArticles = (req, res) => {
 exports.getUserArticles = (req, res) => {
     const userId = req.body.targetUserId;
     Article.findAll({
-        where: { userId: userId },
-        include: [Likes, Comments]
+      where: { userId: userId },
+      attributes: {
+        include: [[Sequelize.fn('COUNT', Sequelize.col('comments.articleId')), 'commentCount']]
+        },
+      include: [{model:Like, attributes: ["id", "value"]},
+        {model: Comment, attributes: []}],
+      group: ['comments.articleId']
     }).then(articleList => {
         if (articleList.length === 0 || !articleList) {
             res.status(200).send({ message: "No articles to display"} )
@@ -85,7 +97,7 @@ exports.getUserArticles = (req, res) => {
 exports.getArticleById = (req, res) => {
     const reqId = req.params.id;
 
-    Article.findByPk(reqId, { include: [Likes, Comments] })
+    Article.findByPk(reqId, { include: [Like, Comment] })
         .then(article => {
             if (!article) {
                 res.status(404).send({message: "No such article"});
