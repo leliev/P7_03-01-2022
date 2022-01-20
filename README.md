@@ -15,5 +15,5 @@
     <li>URL_SERVER</li>
     <li>URL_CLIENT</li>
 </ul>
--npm install in the server folder.
+-npm install in the server folder.<br>
 -Comment the desired section in app.js file for dev(initial function for basic settings) or test 
