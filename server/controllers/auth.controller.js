@@ -17,10 +17,10 @@ exports.signup = (req, res) => {
     User.create({ ...user })
       .then(user => {
         user.setRoles([1]).then(() => {
-            res.send({message: "User registered successfully!"})
+            res.json({message: "User registered successfully!"})
         });
       }).catch(err => {
-          res.status(500).send({message: err.message});
+          res.status(500).json({error: err.message});
       });  
 };
 
@@ -32,13 +32,13 @@ exports.signin = (req, res) => {
         }
     }).then(user => {
         if (!user) {
-            return res.status(404).send({message: "User not found!"});
+            return res.status(404).json({message: "User not found!"});
         }
 
         var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
 
         if (!passwordIsValid) {
-            return res.status(401).send({
+            return res.status(401).json({
                 accessToken: null,
                 message: "Invalid Password!"
             });
@@ -53,7 +53,7 @@ exports.signin = (req, res) => {
             for (let i = 0; i < roles.length; i++) {
                 authorities.push("ROLE_" + roles[i].name.toUpperCase());
             }
-            res.status(200).send({
+            res.status(200).json({
                 id: user.id,
                 username: user.username,
                 email: user.email,
@@ -62,6 +62,6 @@ exports.signin = (req, res) => {
             });
         });
     }).catch(err => {
-        res.status(500).send({message: err.message});
+        res.status(500).json({error: err.message});
     });
 };

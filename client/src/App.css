@@ -1,0 +1,21 @@
+.App {
+  text-align: center;
+}
+.container {
+  width: 80%;
+  display: flex;
+  background-color: #282c34;
+  margin: auto;
+  justify-content: space-around;
+  align-items: center;
+}
+.container a {
+  background-color: aqua;
+  margin-right: 10px;
+}
+
+img {
+  width: 55%;
+  min-width: 130px
+}
+
