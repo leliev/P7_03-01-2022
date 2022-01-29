@@ -48,7 +48,7 @@ function Signup() {
             <br />
             <ErrorMessage name="username" component="span" />
             <br />
-            <label for="username">Name : </label>
+            <label htmlFor="username">Name : </label>
             <Field
               aria-label="votre nom d'utilisateur"
               id="username"
@@ -59,7 +59,7 @@ function Signup() {
             <br />
             <ErrorMessage name="email" component="span" />
             <br />
-            <label for="email">E-mail : </label>
+            <label htmlFor="email">E-mail : </label>
             <Field
               aria-label="votre adresse email"
               id="email"
@@ -70,7 +70,7 @@ function Signup() {
             <br />
             <ErrorMessage name="password" component="span" />
             <br />
-            <label for="password">Mot de passe : </label>
+            <label htmlFor="password">Mot de passe : </label>
             <Field
               aria-label="votre mot de passe"
               id="password"
@@ -82,7 +82,7 @@ function Signup() {
             <br />
             <ErrorMessage name="confirmation" component="span" />
             <br />
-            <label for="confirmation">Confirmation : </label>
+            <label htmlFor="confirmation">Confirmation : </label>
             <Field
               aria-label="confirmer votre mot de passe"
               id="confirmation"

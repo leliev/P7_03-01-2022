@@ -1,17 +1,28 @@
 import React, { useEffect, useContext } from "react";
 import { UserContext } from "../helpers/userContext";
+import { useNavigate } from "react-router-dom";
 
 function Article() {
-    const { userState } = useContext(UserContext);
+  const { userState, toggleUserState } = useContext(UserContext);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!userState.isLoggedin) {
-            window.location.replace("/signin");
-        }
-    });
+  useEffect(() => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    if (!user) {
+      navigate("/signin")
+    } else if (user && userState === false) {
+      toggleUserState();
+    }
+  })
 
     return (
-        <h1>Login Page</h1>
+      <div>
+        {userState && (
+          <h1>Article page</h1>
+        )}
+      </div>
+      
+        
     );
 }
 

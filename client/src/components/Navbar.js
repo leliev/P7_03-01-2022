@@ -4,23 +4,41 @@ import { NavLink } from "react-router-dom";
 
 
 function Navbar() {
+
     const { userState } = useContext(UserContext);
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    let privilege = null;
+
+    if (!user) {
+        privilege = false;
+    } else {
+        privilege = user.roles.includes("ROLE_ADMIN");
+    }
+     
+
+    const logout = () => {
+        sessionStorage.removeItem("user");
+        window.location.replace('/');
+    }
 
     return(
         <nav className="container">
-            {userState.isLoggedin ? (
+            {userState ? (
             <>
-                <NavLink to={'/article'} aria-label="page des articles">
+                <NavLink to={'/'} aria-label="page des articles">
                     Articles
                 </NavLink>
                 <NavLink to={'/user'} aria-label="page de profile">
                     Profile
                 </NavLink>
-                {userState.isAdmin && (
+                {privilege && (
                     <NavLink to={'/admin'} aria-label="page administrateur">
                         Admin
                     </NavLink>
                 )}
+                <button aria-label="Déconnexion" onClick={logout}>
+                    logout
+                </button>
             </>
             ) : (
             <>

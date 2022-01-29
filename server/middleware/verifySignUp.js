@@ -15,18 +15,22 @@ checkDuplicateUser = (req, res, next) => {
             return;
         }
         User.findOne({
-          where: {
-              email: req.body.email
-          }
-      }).then(user => {
-          if (user) {
-              res.status(400).json({
-                  message: "Failed! User already exist!(email)"
-              });
-              return;
-          }
-        next();
-      });  
+            where: {
+                email: req.body.email
+            }
+        }).then(user => {
+            if (user) {
+                res.status(400).json({
+                    message: "Failed! User already exist!(email)"
+                });
+                return;
+            }
+            next();
+        }).catch(err => {
+            res.status(500).json({error: err.message});
+        });  
+    }).catch(err => {
+        res.status(500).json({error: err.message});
     });
 };
 
