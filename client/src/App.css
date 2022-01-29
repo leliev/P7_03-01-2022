@@ -19,3 +19,8 @@ img {
   min-width: 130px
 }
 
+.articleFooter {
+  display: flex;
+  background-color: beige;
+  justify-content: space-between;
+}

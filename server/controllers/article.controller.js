@@ -95,14 +95,33 @@ exports.getUserArticles = (req, res) => {
 };
 
 exports.getArticleById = (req, res) => {
-    const reqId = req.params.id;
 
-    Article.findByPk(reqId, { include: [Like, Comment] })
+    const data = JSON.parse(req.params.data);
+    const articleId = data.article;
+    const userId = data.user;
+
+    Article.findByPk(articleId, { include: [Like, Comment] })
+
         .then(article => {
             if (!article) {
+
                 res.status(404).send({message: "No such article"});
             } else {
-                res.status(200).send(article);
+
+              const currentLike = article.like
+              User.findByPk(userId).then((user) => {
+
+                currentLike.hasUser(user).then((isLiked) => {
+
+                  const payload = {article, isLiked}
+                  res.status(200).json(payload);
+
+                }).catch(() => {
+                    res.status(404).send({message: "Error relation user/like"});
+                });
+              }).catch(() => {
+                res.status(404).send({message: "Can't find request user"});
+              });
             };
         }).catch(err => {
             res.status(500).send({

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -8,6 +8,13 @@ function Signin() {
 
   const [message, setMessage] = useState(null);
   let navigate = useNavigate();
+  
+  useEffect(() => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    if (user) {
+      navigate("/")
+    }
+  });
 
   const initialValues = {
     username: '',

@@ -26,7 +26,7 @@ module.exports = function(app) {
 
     //Must be logged, onclick on article
     //[id, token, (params.id)]
-    app.get("/api/article/:id",
+    app.get("/api/article/:data",
         [authJwt.verifyToken],
         controller.getArticleById
     );
