@@ -8,6 +8,11 @@ const Comment = db.comment;
 exports.createArticle = (req, res) => {
   const userId = req.body.id;
   const title = req.body.title;
+  const content = req.body.content;
+
+  if (!title || !content) {
+    res.status(400).send({message: "Content required"});
+  };
 
   Article.findOne({
       where: {title: title}
@@ -39,7 +44,7 @@ exports.createArticle = (req, res) => {
         res.status(404).send({message: err.message || "Error referencing current user"});
       });
     } else {
-      res.send({ message: "Title already in use"});
+      res.status(400).send({ message: "Title already in use"});
     };
   }).catch(err => {
     res.status(500).send({message: err.message});
@@ -55,12 +60,12 @@ exports.getAllArticles = (req, res) => {
         attributes: {
           include: [[Sequelize.fn('COUNT', Sequelize.col('comments.articleId')), 'commentCount']]
         },
-        group: ['comments.articleId']
+        group: ['id']
     }).then(articleList => {
         if (articleList.length === 0 || !articleList) {
             res.status(200).send({ message: "No articles to display"} )
         } else {
-            return res.status(200).send(articleList);
+            return res.status(200).json(articleList);
         };
     }).catch(err => {
         res.status(500).send({
@@ -97,7 +102,7 @@ exports.getUserArticles = (req, res) => {
 exports.getArticleById = (req, res) => {
 
     const data = JSON.parse(req.params.data);
-    const articleId = data.article;
+    const articleId = data.element;
     const userId = data.user;
 
     Article.findByPk(articleId, { include: [Like, Comment] })
@@ -134,6 +139,10 @@ exports.updateArticle = (req, res) => {
     const reqId = req.params.id;
     const content = req.body.content;
 
+    if (!content) {
+      res.status(400).send({message: "Content required"});
+    };
+
     Article.update(
         {content: content}, {
         where: { id: reqId }
@@ -155,10 +164,12 @@ exports.updateArticle = (req, res) => {
 };
 
 exports.deleteArticle = (req, res) => {
-    const reqId = req.params.id;
+    const data = JSON.parse(req.params.data);
+    const articleId = data.element;
+    const userId = data.user;
 
     Article.destroy({
-        where: { id: reqId }
+        where: { id: articleId }
     }).then(rows => {
         if (rows == 1) {
           res.status(200).send({
@@ -166,7 +177,7 @@ exports.deleteArticle = (req, res) => {
           });
         } else {
           res.status(500).send({
-            message: `Cannot delete article with id=${reqId}`
+            message: `Cannot delete article with id=${articleId}`
           });
         };
     }).catch(err => {

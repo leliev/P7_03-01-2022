@@ -3,12 +3,12 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [userState, setUserState] = useState(false);
-    const toggleUserState = () => {
+    /*const toggleUserState = () => {
         setUserState(userState === false ? true : false)
-    }
+    }*/
 
       return (
-          <UserContext.Provider value={{ userState, toggleUserState }}>
+          <UserContext.Provider value={{ userState, setUserState }}>
               {children}
           </UserContext.Provider>
       )

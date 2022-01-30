@@ -1,68 +1,96 @@
-import React, { useEffect, useState, useContext } from "react";
-import { UserContext } from "../helpers/userContext";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Create from "../components/Article/Create";
+import ActionBar from "../components/Article/ActionBar";
 
 function Home() {
-  const { userState, toggleUserState } = useContext(UserContext);
+  
+  const user = JSON.parse(sessionStorage.getItem("user"));
+
   const [message, setMessage] = useState(null);
   const [articleList, setArticleList] = useState([]);
+  const [displayForm, setDisplayForm] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = JSON.parse(sessionStorage.getItem("user"));
+    
+    setMessage("");
 
     if (!user) {
-      navigate("/signin")
-    } else if (user && userState === false) {
-      toggleUserState();
+      navigate("/signin");
     };
 
     if (user) {
-
       axios.get("http://localhost:8080/api/article", { headers : { 'x-access-token': user.accessToken } })
+
         .then((res) => {
           setArticleList(res.data);
-          console.log(articleList);
+
         }).catch((error) => {
           setMessage(error.response.data.message);
           console.log(error);
         });
+
+        //return setArticleList([])
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
+
+  function toggleForm() {
+    setDisplayForm(!displayForm);
+  };
 
   return (
     <div className="articleWrapper">
       {message && (
         <span>{message}</span>
       )}
-      {articleList.map((value, key) => {
+      {displayForm ? (
+        <div>
+          <button onClick={toggleForm}>
+            Close form
+          </button>
+          <Create props={user}/>
+        </div> 
+      ) : (
+        <div>
+          <button onClick={toggleForm}>
+            Share your Story
+          </button>
+        </div>
+      )}
+      {articleList.map((article, key) => {
         return (
           <div className="articleCard" key={key}>
+
             <div className="articleBody"  onClick={() => {
-              navigate(`/article/${value.id}`)
+              navigate(`/article/${article.id}`)
             }}>
-              <h3>{value.title}</h3>
+              <h3>{article.title}</h3>
               <p>
-                {value.content}
+                {article.content}
               </p>
             </div>
+
             <div className="articleFooter">
-              <span>Likes : {value.like.value}</span>
-              {value.userId ? (
-          <span onClick={() => {
-            navigate(`/user/${value.userId}`)
-          }}>
-            Author : {value.author}
-          </span>
-        ) : (
-          <span>
-            Author (deleted): {value.author}
-          </span>
-        )}
-              <span>Comments : {value.commentCount}</span>
+              <span>Likes : {article.like.value}</span>
+
+              {article.userId ? (
+                <span onClick={() => {
+                  navigate(`/user/${article.userId}`)
+                }}>
+                  Author : {article.author}
+                </span>
+              ) : (
+                <span>
+                  Author (deleted): {article.author}
+                </span>
+              )}
+
+              <span>Comments : {article.commentCount}</span>
             </div>
+            <ActionBar props={article} />
           </div>
         )
       })}

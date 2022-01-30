@@ -47,7 +47,7 @@ module.exports = function(app) {
 
     //Must be logged and owner or admin, option from unique article page
     //[id, token]
-    app.delete("/api/article/:id",
+    app.delete("/api/article/:data",
         [authJwt.verifyToken, ownerOrAdmin],
         controller.deleteArticle
     );

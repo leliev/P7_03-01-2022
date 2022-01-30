@@ -1,11 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { UserContext } from "../helpers/userContext";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 
 function Navbar() {
 
-    const { userState } = useContext(UserContext);
+    const location = useLocation();
+    const { userState, setUserState } = useContext(UserContext);
     const user = JSON.parse(sessionStorage.getItem("user"));
     let privilege = null;
 
@@ -13,14 +14,24 @@ function Navbar() {
         privilege = false;
     } else {
         privilege = user.roles.includes("ROLE_ADMIN");
-    }
-     
+    };
 
+    useEffect(() => {
+        console.log(userState)
+        if (user && userState === false) {
+            setUserState(true);
+        } 
+
+        //return userState
+         
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[location]);
+    
     const logout = () => {
         sessionStorage.removeItem("user");
         window.location.replace('/');
-    }
-
+    };
+    
     return(
         <nav className="container">
             {userState ? (
@@ -52,5 +63,6 @@ function Navbar() {
             )}
         </nav>
     );
-}
+};
+
 export default Navbar;

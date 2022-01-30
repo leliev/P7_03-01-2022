@@ -3,8 +3,38 @@ const User = db.user;
 const Article = db.article;
 
 module.exports = (req, res, next) => {
-    const userId = req.body.id;
-    const elementId = req.params.id;
+    let userId = 0;
+    let elementId = 0;
+    console.log("method:"+req.method)
+    /*if (req.method == "DELETE") {
+        console.log("get/delete route")
+        const data = JSON.parse(req.params.data);
+        userId = data.user;
+        elementId = data.element;
+    } else if (req.method === ("PUT" || "POST")) {
+        userId = req.body.id;
+        elementId = req.params.id;
+    }*/
+    switch (req.method) {
+        case "GET":
+            
+        case "DELETE":
+            console.log("get/delete route")
+            const data = JSON.parse(req.params.data);
+            userId = data.user;
+            elementId = data.element;
+            break;
+
+        case "PUT":
+
+        case "POST":
+            userId = req.body.id;
+            elementId = req.params.id;
+            break;
+        default:
+            break;
+    };
+    
 
     const url = new URL(req.url, process.env.URL_SERVER);
     const path = url.pathname.split("/");

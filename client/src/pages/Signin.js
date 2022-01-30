@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { signinSchema } from "../helpers/signinSchema";
+import { signinSchema } from "../helpers/Schema/signinSchema";
 
 function Signin() {
 
@@ -36,6 +36,7 @@ function Signin() {
         setMessage(error.response.data.message);
       });
   };
+  
   return (
     <div>
       {message && (
@@ -48,7 +49,7 @@ function Signin() {
         onSubmit={onSubmit}
       >
         <Form className="sign_form">
-          <h1>Enregistez vous</h1>
+          <h1>Registration</h1>
           <br />
           <ErrorMessage name="username" component="span" />
           <br />
@@ -63,7 +64,7 @@ function Signin() {
           <br />
           <ErrorMessage name="password" component="span" />
           <br />
-          <label htmlFor="password">Mot de passe : </label>
+          <label htmlFor="password">password : </label>
           <Field
             aria-label="votre mot de passe"
             id="password"
@@ -79,7 +80,7 @@ function Signin() {
             type="submit"
             aria-label="valider"
           >
-            Valider
+            Log In
           </button>
         </Form>
       </Formik>
