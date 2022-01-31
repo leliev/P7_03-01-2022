@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { useParams, useNavigate} from 'react-router-dom';
 import Create from "../components/Article/Create";
-import ActionBar from "../components/Article/ActionBar";
+import ActionBar from "../components/ActionBar";
 
 function Article() {
   let { id } = useParams();
@@ -64,14 +64,14 @@ function Article() {
   return (
     <div>
       {displayForm ? (
-        <div>
+        <div className="articleCreator">
           <button onClick={toggleForm}>
             Close form
           </button>
           <Create props={user}/>
         </div> 
       ) : (
-        <div>
+        <div className="articleCreator">
           <button onClick={toggleForm}>
             Share your Story
           </button>
@@ -84,7 +84,7 @@ function Article() {
             )}
 
         <div className="articleBody">
-          <h3>{article.title}</h3>
+          <h2>{article.title}</h2>
           <p>
             {article.content}
           </p>
@@ -119,15 +119,20 @@ function Article() {
       </div>
 
       <div className="commentWrapper">
-        {commentList.map((value, key) => {
+        {commentList.map((comment, key) => {
           return (
-            <div className="commentCard" key={key} onClick={() => {
-              navigate(`/comments/${value.id}`)
-            }}>
+            <div className="commentCard" key={key}>
               <p>
-                {value.content}
+                {comment.content}
               </p>
-              <span>Author : {value.author}</span>
+
+              <div className="commentFooter">
+                <span>Author : {comment.author}</span>
+              </div>
+              
+              <div>
+                <ActionBar props={comment}/>
+              </div>
             </div>
           );
         })}

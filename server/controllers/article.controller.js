@@ -166,7 +166,6 @@ exports.updateArticle = (req, res) => {
 exports.deleteArticle = (req, res) => {
     const data = JSON.parse(req.params.data);
     const articleId = data.element;
-    const userId = data.user;
 
     Article.destroy({
         where: { id: articleId }

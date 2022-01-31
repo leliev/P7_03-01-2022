@@ -14,9 +14,20 @@
   margin-right: 10px;
 }
 
-img {
-  width: 55%;
-  min-width: 130px
+.article_form {
+  width: 60%;
+  margin: auto;
+  border: 1px solid purple;
+}
+
+.articleCreator {
+  margin: 5px;
+}
+
+.articleCard {
+  border: 1px solid salmon;
+  margin: 5px;
+  padding: 5px;
 }
 
 .articleFooter {
@@ -24,3 +35,21 @@ img {
   background-color: beige;
   justify-content: space-between;
 }
+
+.commentCard {
+  width: 60%;
+  margin: auto;
+  border: 1px solid blueviolet;
+}
+
+.commentFooter {
+  background-color: beige;
+  justify-content: space-between;
+}
+
+img {
+  width: 55%;
+  min-width: 130px
+}
+
+

@@ -1,23 +1,22 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { articleSchema } from "../../helpers/Schema/articleSchema";
+import { customSchema } from "../../helpers/Schema/customSchema";
 
-function Create(props) {
+function Create(data) {
 
-  const user = props.props
+  const props = data.data
   const [message, setMessage] = useState(null);
   
   useEffect(() => {
-    console.log(user.id)
+    console.log(props)
     setMessage("")
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
   
-  const validationSchema = articleSchema;
+  const validationSchema = customSchema;
   const initialValues = {
-    title: "",
     content: ""
   };
 
@@ -25,10 +24,10 @@ function Create(props) {
     
     const payload = {
       ...data,
-      id: user.id
+      id: props.user.id
     };
 
-    axios.post("http://localhost:8080/api/article", payload, { headers : { 'x-access-token': user.accessToken } })
+    axios.post(`http://localhost:8080/api/comment/${props.element.id}`, payload, { headers : { 'x-access-token': props.user.accessToken } })
       .then((response) => {
         console.log(response.data.message);
         window.location.reload();
@@ -49,19 +48,7 @@ function Create(props) {
         onSubmit={onSubmit}
       >
         <Form className="article_form">
-          <h3>Share your story</h3>
-          <br />
-          <ErrorMessage name="title" component="span" />
-          <br />
-          <label htmlFor="title">Title : </label>
-          <br/>
-          <Field
-            aria-label="titre de l'article"
-            id="title"
-            name="title"
-            placeholder="My Title"
-            autoComplete="off"
-          />
+          <h3>Comment article</h3>
           <br />
           <ErrorMessage name="content" component="span" />
           <br />
@@ -69,7 +56,7 @@ function Create(props) {
           <br />
           <Field
             as="textarea"
-            aria-label="votre histoire"
+            aria-label="votre commentaire"
             id="content"
             name="content"
             placeholder="My story"

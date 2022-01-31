@@ -21,8 +21,9 @@ module.exports = (req, res, next) => {
         case "DELETE":
             console.log("get/delete route")
             const data = JSON.parse(req.params.data);
-            userId = data.user;
-            elementId = data.element;
+            console.log(data.user)
+            userId = parseInt(data.user);
+            elementId = parseInt(data.element);
             break;
 
         case "PUT":

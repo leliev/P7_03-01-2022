@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Create from "../components/Article/Create";
-import ActionBar from "../components/Article/ActionBar";
+import ActionBar from "../components/ActionBar";
 
 function Home() {
   
@@ -47,14 +47,14 @@ function Home() {
         <span>{message}</span>
       )}
       {displayForm ? (
-        <div>
+        <div className="articleCreator">
           <button onClick={toggleForm}>
             Close form
           </button>
           <Create props={user}/>
         </div> 
       ) : (
-        <div>
+        <div className="articleCreator">
           <button onClick={toggleForm}>
             Share your Story
           </button>
@@ -67,7 +67,7 @@ function Home() {
             <div className="articleBody"  onClick={() => {
               navigate(`/article/${article.id}`)
             }}>
-              <h3>{article.title}</h3>
+              <h2>{article.title}</h2>
               <p>
                 {article.content}
               </p>

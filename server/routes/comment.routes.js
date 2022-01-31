@@ -11,7 +11,7 @@ module.exports = function(app) {
     });
     //Must be logged, option from unique article page
     //[id, token, content, (params.id)]
-    app.post("/api/article/:id",
+    app.post("/api/comment/:id",
         [authJwt.verifyToken],
         controller.createComment
     );
@@ -29,7 +29,7 @@ module.exports = function(app) {
     );
     //Must be logged and owner or admin, option from unique comment page
     //[id, token, (params.id)]
-    app.delete("/api/comment/:id",
+    app.delete("/api/comment/:data",
         [authJwt.verifyToken, ownerOrAdmin],
         controller.deleteComment
     );

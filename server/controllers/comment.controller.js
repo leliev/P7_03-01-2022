@@ -4,18 +4,25 @@ const User = db.user;
 
 exports.createComment = (req, res) => {
     const userId = req.body.id ;
+    const articleId = parseInt(req.params.id)
+    const content = req.body.content;
+
+    if (!content) {
+      res.status(400).send({message: "Content required"});
+    };
     
     User.findOne({
         where: { id: userId }
     }).then(user => {
         const comment = {
-            content: req.body.content,
+            content: content,
             author: user.username,
             userId: userId,
-            articleId: req.params.id
+            articleId: articleId
         };
+
         Comment.create({...comment})
-            .then(comment => {
+            .then(() => {
                 res.status(200).send({message: "Comment created"});
             }).catch(err => {
                 res.status(500).send({message: err.message || "Could not create comment"});
@@ -67,10 +74,12 @@ exports.updateComment = (req, res) => {
 }
 
 exports.deleteComment = (req, res) => {
-    const reqId = req.params.id;
+  const data = JSON.parse(req.params.data);
+  const commentId = data.element;
+  
 
     Comment.destroy({
-        where: {id: reqId}
+        where: {id: commentId}
     }).then(rows => {
         if (rows == 1) {
           res.status(200).send({
@@ -78,7 +87,7 @@ exports.deleteComment = (req, res) => {
           });
         } else {
           res.status(500).send({
-            message: `Cannot delete comment with id=${reqId}`
+            message: `Cannot delete comment with id=${commentId}`
           });
         };
     }).catch(err => {
