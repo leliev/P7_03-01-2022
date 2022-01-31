@@ -22,7 +22,7 @@ verifyToken = (req, res, next) => {
                 case "GET":
                     
                 case "DELETE":
-                    //req.userId = decoded.id;
+                    req.userId = decoded.id;
                     next();
                     break;
         
@@ -53,7 +53,7 @@ verifyToken = (req, res, next) => {
 };
 
 isAdmin = (req, res, next) => {
-    const userId = req.body.id
+    const userId = req.userId
     User.findByPk(userId).then(user => {
         user.getRoles().then(roles => {
             for (let i = 0; i < roles.length; i++) {

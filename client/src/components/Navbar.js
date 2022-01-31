@@ -37,7 +37,7 @@ function Navbar() {
                 <NavLink to={'/'} aria-label="page des articles">
                     Articles
                 </NavLink>
-                <NavLink to={'/user'} aria-label="page de profile">
+                <NavLink to={`/user/${user.username}`} aria-label="page de profile">
                     Profile
                 </NavLink>
                 {privilege && (

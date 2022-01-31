@@ -21,7 +21,7 @@ button {
 
 .article_form {
   width: 60%;
-  margin: 5px auto 5px auto;
+  margin: 5px auto;
   padding: 5px;
   border: 1px solid purple;
 }
@@ -45,7 +45,8 @@ button {
 
 .commentCard {
   width: 60%;
-  margin: auto;
+  margin: 5px auto;
+  padding: 5px;
   border: 1px solid blueviolet;
 }
 
@@ -56,6 +57,18 @@ button {
 
 .modifyWrapper {
   margin-top: 5px;
+}
+
+.userWrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.userCard {
+  border: 1px solid black;
+  cursor: pointer;
+  width: 40%;
+  margin: 5px auto ;
 }
 img {
   width: 55%;

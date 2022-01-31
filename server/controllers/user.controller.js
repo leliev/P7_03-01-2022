@@ -1,5 +1,8 @@
+const Sequelize  = require("sequelize");
 const db = require("../models");
 const User = db.user;
+const Comment = db.comment;
+const Article = db.article;
 
 
 exports.allAccess = (req, res) => {
@@ -12,7 +15,19 @@ exports.userBoard = (req, res) => {
 
 //Get list of all users
 exports.adminBoard = (req, res) => {
-    User.findAll().then(userList => {
+    User.findAll({
+            include: [
+              {model: Article, attributes:[]},
+              {model: Comment, attributes:[]}
+            ],
+            attributes: {
+              include: [
+                    [Sequelize.fn('COUNT', Sequelize.col('comments.userId')), 'commentCount'],
+                    [Sequelize.fn('COUNT', Sequelize.col('articles.userId')), 'articleCount']    
+            ]},
+            group: ['id']
+            
+    }).then(userList => {
       if (userList.length === 0 || !userList) {
         res.status(500).send({message: "cannot be right"})
       } else {

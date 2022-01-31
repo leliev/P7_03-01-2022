@@ -80,8 +80,8 @@ function Article() {
       <div className="articleCard">
 
         {message && (
-              <span>{message}</span>
-            )}
+          <span>{message}</span>
+        )}
 
         <div className="articleBody">
           <h2>{article.title}</h2>
