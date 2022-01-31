@@ -1,6 +1,11 @@
 .App {
   text-align: center;
 }
+
+button {
+  margin: 0 5px;
+}
+
 .container {
   width: 80%;
   display: flex;
@@ -16,7 +21,8 @@
 
 .article_form {
   width: 60%;
-  margin: auto;
+  margin: 5px auto 5px auto;
+  padding: 5px;
   border: 1px solid purple;
 }
 
@@ -34,6 +40,7 @@
   display: flex;
   background-color: beige;
   justify-content: space-between;
+  margin-bottom: 5px;
 }
 
 .commentCard {
@@ -47,6 +54,9 @@
   justify-content: space-between;
 }
 
+.modifyWrapper {
+  margin-top: 5px;
+}
 img {
   width: 55%;
   min-width: 130px

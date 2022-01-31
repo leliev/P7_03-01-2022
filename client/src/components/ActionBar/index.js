@@ -45,8 +45,10 @@ function ActionBar(props) {
   function toggleForm(e) {
     console.log(e.target.className)
     if (e.target.className === "modify") {
+      setDisplayCForm(false)
       setDisplayMForm(!displayMForm);
     } else {
+      setDisplayMForm(false)
       setDisplayCForm(!displayCForm);
     };
   };
@@ -85,7 +87,7 @@ function ActionBar(props) {
       {privilege || owner ? (
         <>
           {displayMForm ? (
-            <div>
+            <div  className="modifyWrapper">
               <button className="modify" onClick={(e) => {toggleForm(e)}}>
                 Close form
               </button>
