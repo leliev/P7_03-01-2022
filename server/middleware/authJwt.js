@@ -22,6 +22,7 @@ verifyToken = (req, res, next) => {
                 case "GET":
                     
                 case "DELETE":
+                    console.log("get/delete route JWT")
                     req.userId = decoded.id;
                     next();
                     break;
@@ -29,7 +30,9 @@ verifyToken = (req, res, next) => {
                 case "PUT":
         
                 case "POST":
-                    if (req.body.id && req.body.id !== decoded.id) {
+                    console.log("put/post route JWT")
+                    const id = parseInt(req.body.id)
+                    if (id && id !== decoded.id) {
                         throw 'Invalid user ID';
                     } else {
                         next();
@@ -38,16 +41,6 @@ verifyToken = (req, res, next) => {
                 default:
                     break;
             };
-            /*if (req.method === ("GET" || "DELETE")) {
-                req.userId = decoded.id;
-                next();
-            } else {
-                if (req.body.id && req.body.id !== decoded.id) {
-                    throw 'Invalid user ID';
-                } else {
-                    next();
-                };
-            };*/
         });
     }; 
 };

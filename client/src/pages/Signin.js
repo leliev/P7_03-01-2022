@@ -29,7 +29,7 @@ function Signin() {
         if (res.data) {
           const user = res.data;
           sessionStorage.setItem("user", JSON.stringify(user));
-          navigate('/');
+          window.location.replace('/');
         };
 
       }).catch((error) => {

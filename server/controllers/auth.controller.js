@@ -58,7 +58,9 @@ exports.signin = (req, res) => {
                 username: user.username,
                 email: user.email,
                 roles: authorities,
+                imageUrl: user.imageUrl,
                 accessToken: token
+                
             });
         });
     }).catch(err => {

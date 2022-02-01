@@ -7,8 +7,6 @@ function Modify(data) {
   const props = data.data
   const [message, setMessage] = useState(null);
 
-  
-
   const validationSchema = customSchema;
   const initialValues = {
     content: props.element.content

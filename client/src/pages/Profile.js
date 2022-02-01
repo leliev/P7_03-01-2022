@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { useParams, useNavigate, useLocation} from 'react-router-dom';
+import ModifyImage from "../components/User/ModifyImage"
 
 function Profile() {
 
@@ -9,12 +10,18 @@ function Profile() {
 
   const [message, setMessage] = useState(null);
   const [currentProfile, setCurrentProfile] = useState({});
+  const [isOwner, setIsOwner] = useState(false);
+  
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
 
     setMessage("");
+    if (name === toString(user.username)) {
+      setIsOwner(true);
+      console.log(isOwner+ ","+name +","+user.username)
+    }
 
     if (user) {
       let URL = `http://localhost:8080/api/user/${name}`
@@ -40,6 +47,10 @@ function Profile() {
         <span>{message}</span>
       )}
       <h1>Profile page</h1>
+      <div className="imageCard">
+        <img src={currentProfile.imageUrl} alt="user profile"/>
+        <ModifyImage />
+      </div>
       <div className="userCard">
         <div className="userBody">
           <h3>{currentProfile.username}</h3>

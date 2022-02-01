@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../helpers/userContext";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 
 function Navbar() {
 
-    const location = useLocation();
-    const { userState, setUserState } = useContext(UserContext);
+    //const location = useLocation();
+    const { userState } = useContext(UserContext);
     const user = JSON.parse(sessionStorage.getItem("user"));
     let privilege = null;
 
@@ -17,13 +17,9 @@ function Navbar() {
     };
 
     useEffect(() => {
-        console.log(userState)
-        if (user && userState === false) {
-            setUserState(true);
-        } 
-         
+        console.log(userState) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[location]);
+    },[userState]);
     
     const logout = () => {
         sessionStorage.removeItem("user");

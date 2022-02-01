@@ -19,10 +19,16 @@ module.exports = (sequelize, Sequelize) => {
         },
         password: {
             type: Sequelize.STRING,
+            allowNull: false,
             validate: {
                 min: 8
             }
-        }
+        },
+        imageUrl: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            defaultValue: 'http://localhost:8080/images/default_user.png',
+            }
     });
     return User;
 };

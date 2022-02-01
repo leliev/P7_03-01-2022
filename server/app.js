@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const db = require("./models")
 const initial = require("./config/db.init");
@@ -27,6 +28,7 @@ db.sequelize.sync().then(() => {
   console.log('Drop and Resync Db');
   initial();
 });*/
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);

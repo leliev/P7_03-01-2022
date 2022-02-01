@@ -70,7 +70,10 @@ button {
   width: 40%;
   margin: 5px auto ;
 }
-img {
+.imageCard img {
+  width: 100px;
+}
+header img {
   width: 55%;
   min-width: 130px
 }

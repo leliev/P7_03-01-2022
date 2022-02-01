@@ -1,3 +1,4 @@
+const fs = require("fs");
 const Sequelize  = require("sequelize");
 const db = require("../models");
 const User = db.user;
@@ -5,13 +6,13 @@ const Comment = db.comment;
 const Article = db.article;
 
 
-exports.allAccess = (req, res) => {
+/*exports.allAccess = (req, res) => {
     res.status(200).send("Public content");
 };
 
 exports.userBoard = (req, res) => {
     res.status(200).send("User content");
-};
+};*/
 
 //Get list of all users
 exports.adminBoard = (req, res) => {
@@ -41,8 +42,50 @@ exports.adminBoard = (req, res) => {
     });
 };
 
-exports.userUpdate = (req, res) => {
-  //to add
+exports.updateUser = async (req, res) => {
+  try {
+    const userId = parseInt(req.params.id);
+    const defaultUrl = 'http://localhost:8080/images/default_user.png';
+    
+    let image;
+
+    const user = await User.findByPk(userId);
+    console.log(user)
+    if (req.file) {
+
+      if (user.imageUrl !== defaultUrl) {
+        const filename = user.imageUrl.split('/images/')[1];
+        fs.unlink(`images/${filename}`, (err) => {
+          if (err) throw err;
+          console.log("deleted old image");
+        });
+      };
+
+      image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+    };
+
+    console.log(image)
+    User.update({ imageUrl: image }, { where: { id: userId } }).then(rows => {
+      if (rows == 1) {
+        res.status(200).send({
+          message: "User was updated successfully."
+        });
+      } else {
+        res.status(500).send({
+          message: `Cannot update user with id=${id}`
+        });
+      };
+    }).catch(err => {
+      res.status(500).send({
+        message: err.message || "Error updating user image"
+      });
+    });
+    
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Error updating user image"
+    });
+  }
 };
 
 
@@ -61,6 +104,7 @@ exports.getUserByName = (req, res) => {
                         targetId: user.id,
                         username: user.username,
                         email: user.email,
+                        imageUrl: user.imageUrl,
                         Article: totalArticle,
                         Comment: totalComment
                     }

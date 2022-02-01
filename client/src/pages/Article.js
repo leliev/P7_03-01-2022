@@ -100,7 +100,7 @@ function Article() {
     
           {article.userId ? (
             <span onClick={() => {
-              navigate(`/user/${article.userId}`)
+              navigate(`/user/${article.author}`)
             }}>
               Author : {article.author}
             </span>
