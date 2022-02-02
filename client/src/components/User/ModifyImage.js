@@ -1,24 +1,23 @@
 import React, { useState } from "react";
-
 import axios from "axios";
 
-function ModifyImage() {
-  const user = JSON.parse(sessionStorage.getItem("user"));
+function ModifyImage(data) {
 
+  const props = data.data;
   const [image, setImage] = useState('');
 
   const handleUpload = (event) => {
 
     event.preventDefault();
 
-    const data = new FormData();
-    data.append('id', user.id);
-    data.append('image', image);
+    const payload = new FormData();
+    payload.append('id', props.user.id);
+    payload.append('image', image);
 
-    axios.put(`http://localhost:8080/api/user/${user.id}`, data, { headers : { 'x-access-token': user.accessToken } })
+    axios.put(`http://localhost:8080/api/user/${props.currentProfile.targetId}`, payload, { headers : { 'x-access-token': props.user.accessToken } })
       .then((res) => {
         //setImage({ ...image, image: data });
-        window.location.replace(`/user/${user.username}`);
+        window.location.replace(`/user/${props.currentProfile.username}`);
       }).catch((error) => {
         console.log(error.response.data.message);
       });
@@ -26,6 +25,7 @@ function ModifyImage() {
 
   return (
     <>
+    {props.user.id === props.currentProfile.targetId ? (
       <form onSubmit={handleUpload} className="upload">
         <br />
         <input
@@ -41,6 +41,9 @@ function ModifyImage() {
           Update
         </button>
       </form>
+    ) : (
+      <></>
+    )}
     </>
   );
 }

@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  width: 80%;
+  margin: auto;
 }
 
 button {
@@ -63,19 +65,34 @@ button {
   display: flex;
   flex-wrap: wrap;
 }
-
+.profileCard{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .userCard {
   border: 1px solid black;
   cursor: pointer;
   width: 40%;
-  margin: 5px auto ;
+  margin: 5px;
+}
+.imageCard {
+  border: 1px solid black;
+  margin: 5px;
+  width: 40%;
 }
 .imageCard img {
-  width: 100px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
 }
 header img {
   width: 55%;
   min-width: 130px
+}
+
+.profileFooter {
+  border: 1px solid blue;
 }
 
 

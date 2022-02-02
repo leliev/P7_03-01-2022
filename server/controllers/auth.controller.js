@@ -42,7 +42,7 @@ exports.signin = (req, res) => {
                 accessToken: null,
                 message: "Invalid Password!"
             });
-        }
+        };
 
         var token = jwt.sign({ id: user.id}, process.env.TKEY, {
             expiresIn: 86400 //24H

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { useParams, useNavigate, useLocation} from 'react-router-dom';
 import ModifyImage from "../components/User/ModifyImage"
+import ModifyUser from "../components/User/ModifyUser";
 
 function Profile() {
 
@@ -11,25 +12,27 @@ function Profile() {
   const [message, setMessage] = useState(null);
   const [currentProfile, setCurrentProfile] = useState({});
   const [isOwner, setIsOwner] = useState(false);
+  const [privilege, setPrivilege] = useState(false);
   
   const navigate = useNavigate();
   const location = useLocation();
-
+  
   useEffect(() => {
-
     setMessage("");
-    if (name === toString(user.username)) {
+    if (name === user.username) {
       setIsOwner(true);
       console.log(isOwner+ ","+name +","+user.username)
-    }
+    };
+    if (user.roles.includes("ROLE_ADMIN")) {
+      setPrivilege(true);
+    };
 
     if (user) {
       let URL = `http://localhost:8080/api/user/${name}`
 
-      console.log(URL)
+      console.log(isOwner, privilege)
       axios.get(URL, { headers : { 'x-access-token': user.accessToken } })
         .then((res) => {
-          console.log(res.data)
           setCurrentProfile(res.data)
         }).catch((error) => {
           setMessage(error.response.data.message);
@@ -40,28 +43,49 @@ function Profile() {
     };  
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[location]);
-    
+
+  
+
+  let data = {
+    currentProfile: currentProfile,
+    user: user
+  };
+  console.log("has privilege"+privilege, "isOwner:"+isOwner)
   return (
-    <div>
-      {message && (
-        <span>{message}</span>
-      )}
+    <>
       <h1>Profile page</h1>
-      <div className="imageCard">
-        <img src={currentProfile.imageUrl} alt="user profile"/>
-        <ModifyImage />
+      <div className="profileCard">
+        {message && (
+          <span>{message}</span>
+        )}
+        <div className="imageCard">
+          <img src={currentProfile.imageUrl} alt="user profile"/>
+        </div>
+        <div className="userCard">
+          <div className="userBody">
+            <h2>{currentProfile.username}</h2>
+            <span>Email : {currentProfile.email}</span>
+          </div>
+          <div className="userFooter">
+            <span>Articles : {currentProfile.Article}</span>
+            <span>Comments : {currentProfile.Comment}</span>
+          </div>
+        </div>
       </div>
-      <div className="userCard">
-        <div className="userBody">
-          <h3>{currentProfile.username}</h3>
-          <span>Email : {currentProfile.email}</span>
-        </div>
-        <div className="userFooter">
-          <span>Articles : {currentProfile.Article}</span>
-          <span>Comments : {currentProfile.Comment}</span>
-        </div>
-      </div>      
-    </div>
+      <div className="profileFooter">
+            {(privilege || isOwner) && (
+              <>
+                <button>Delete User</button>
+              </>
+            )}
+          {isOwner && (
+            <>
+              <ModifyImage data={data}/>
+              <ModifyUser data={data}/>
+            </>   
+          )}
+          </div>
+    </>
   );
 }
 

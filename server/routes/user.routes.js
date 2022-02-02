@@ -34,10 +34,8 @@ module.exports = function(app) {
     );
 
     app.put("/api/user/:id",
-        
-        //authJwt.verifyToken, ownerOrAdmin,
         upload.single('image'),
-        [authJwt.verifyToken],
+        [authJwt.verifyToken, ownerOrAdmin],
         controller.updateUser
     );
     

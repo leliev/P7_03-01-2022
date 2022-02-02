@@ -7,7 +7,7 @@ import ActionBar from "../components/ActionBar";
 function Article() {
   let { id } = useParams();
   const user = JSON.parse(sessionStorage.getItem("user"));
-  const payload = {id: user.id};
+  const likeData = {id: user.id};
 
   const [message, setMessage] = useState(null);
   const [displayForm, setDisplayForm] = useState(false);
@@ -47,7 +47,7 @@ function Article() {
   }, [liked])
 
   function handleClick() {
-    axios.put(`http://localhost:8080/api/like/${article.id}`, payload, { headers : { 'x-access-token': user.accessToken } })
+    axios.put(`http://localhost:8080/api/like/${article.id}`, likeData, { headers : { 'x-access-token': user.accessToken } })
       .then((response) => {
         console.log(response.data.message);
         setLiked(!liked)

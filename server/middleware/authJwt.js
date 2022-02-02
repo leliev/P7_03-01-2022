@@ -4,7 +4,6 @@ const User = db.user;
 
 
 verifyToken = (req, res, next) => {
-    console.log(req.method)
     let token = req.header("x-access-token");
 
     if(!token) {
@@ -32,6 +31,7 @@ verifyToken = (req, res, next) => {
                 case "POST":
                     console.log("put/post route JWT")
                     const id = parseInt(req.body.id)
+                    console.log("id from request:" + id)
                     if (id && id !== decoded.id) {
                         throw 'Invalid user ID';
                     } else {
