@@ -7,14 +7,6 @@ const Article = db.article;
 
 var bcrypt = require("bcryptjs");
 
-/*exports.allAccess = (req, res) => {
-    res.status(200).send("Public content");
-};
-
-exports.userBoard = (req, res) => {
-    res.status(200).send("User content");
-};*/
-
 //Get list of all users
 exports.adminBoard = (req, res) => {
   User.findAll({
@@ -175,6 +167,7 @@ exports.getUserByName = (req, res) => {
 exports.userDelete = (req, res) => {
   const data = JSON.parse(req.params.data);
   const targetId = data.element;
+  console.log(targetId)
     
   User.findByPk(targetId).then(user => {
     //If no user corresponding found 
@@ -182,7 +175,7 @@ exports.userDelete = (req, res) => {
       return res.status(404).send({message: "User not found!"});
     };
 
-    User.destroy({where: { id: userId }}).then(rows => {
+    User.destroy({where: { id: targetId }}).then(rows => {
       if (rows == 1) {
         return res.status(200).send({
           message: "User was deleted successfully!"
@@ -195,10 +188,10 @@ exports.userDelete = (req, res) => {
       };
     //Could not destroy (syntax ?)
     }).catch(err => {
-      res.status(500).send({message: err.message || "Could not delete user"});
+      res.status(500).send({message:  "Could not delete user"});
     });
   //Could not find user (syntax ?)
   }).catch(err => {
-    res.status(500).send({message: err.message || "Could find user to delete"});
+    res.status(500).send({message: err.message || "Could not find user to delete"});
   });
 };

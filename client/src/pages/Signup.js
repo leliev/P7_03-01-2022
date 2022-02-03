@@ -29,7 +29,7 @@ function Signup() {
     axios.post("http://localhost:8080/api/auth/signup", data)
       .then((res) => {
         console.log(res.data);
-        if (res.ok) {
+        if (res.data) {
           setMessage(res.data.message);
           setIsSubmited(true);
         };

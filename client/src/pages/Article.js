@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
+import { UserContext } from "../helpers/userContext";
 import axios from "axios";
 import { useParams, useNavigate} from 'react-router-dom';
 import Create from "../components/Article/Create";
@@ -6,20 +7,19 @@ import ActionBar from "../components/ActionBar";
 
 function Article() {
   let { id } = useParams();
-  const user = JSON.parse(sessionStorage.getItem("user"));
+  const { userState } = useContext(UserContext)
+  const user = userState;
   const likeData = {id: user.id};
 
   const [message, setMessage] = useState(null);
-  const [displayForm, setDisplayForm] = useState(false);
   const [article, setArticle] = useState({});
   const [commentList, setCommentList] = useState([]);
   const [liked, setLiked] = useState(null);
-
+  const [refresh, setRefresh] = useState(false)
   const navigate = useNavigate();
-  //const URL = "http://localhost:8080/api/article"
 
   useEffect(() => {
-    if (user) {
+    if (user.isLogged) {
 
       const payload = { "element": id, "user": user.id };
       const data = JSON.stringify(payload);
@@ -44,7 +44,7 @@ function Article() {
       navigate("/signin");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [liked])
+  }, [liked, refresh])
 
   function handleClick() {
     axios.put(`http://localhost:8080/api/like/${article.id}`, likeData, { headers : { 'x-access-token': user.accessToken } })
@@ -57,26 +57,17 @@ function Article() {
       });
   };
 
-  function toggleForm() {
-    setDisplayForm(!displayForm);
+  function toggleRefresh() {
+    setRefresh(!refresh);
   };
 
+  var data = {
+    element: article,
+    func: toggleRefresh
+  };
   return (
     <div>
-      {displayForm ? (
-        <div className="articleCreator">
-          <button onClick={toggleForm}>
-            Close form
-          </button>
-          <Create props={user}/>
-        </div> 
-      ) : (
-        <div className="articleCreator">
-          <button onClick={toggleForm}>
-            Share your Story
-          </button>
-        </div>
-      )}
+      <Create func={toggleRefresh}/>
       <div className="articleCard">
 
         {message && (
@@ -114,12 +105,16 @@ function Article() {
         </div>
 
         <div>
-          <ActionBar props={article}/>
+          <ActionBar data={data}/>
         </div>
       </div>
 
       <div className="commentWrapper">
         {commentList.map((comment, key) => {
+          var data = {
+            element: comment,
+            func: toggleRefresh
+          };
           return (
             <div className="commentCard" key={key}>
               <p>
@@ -131,7 +126,7 @@ function Article() {
               </div>
               
               <div>
-                <ActionBar props={comment}/>
+                <ActionBar data={data}/>
               </div>
             </div>
           );

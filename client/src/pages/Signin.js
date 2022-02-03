@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../helpers/userContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { signinSchema } from "../helpers/Schema/signinSchema";
 
 function Signin() {
-
+  const {userState} = useContext(UserContext)
   const [message, setMessage] = useState(null);
   let navigate = useNavigate();
   
   useEffect(() => {
-    const user = JSON.parse(sessionStorage.getItem("user"));
-    if (user) {
+    const user = userState;
+    if (user.isLogged) {
       navigate("/")
     }
   });
@@ -27,8 +28,12 @@ function Signin() {
       .then((res) => {
         
         if (res.data) {
-          const user = res.data;
+          const user = {
+            id: res.data.id,
+            accessToken: res.data.accessToken
+          };
           sessionStorage.setItem("user", JSON.stringify(user));
+          console.log("session:" + user)
           window.location.replace('/');
         };
 

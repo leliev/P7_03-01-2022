@@ -17,9 +17,6 @@ function ModifyUser(data) {
   };
 
   const formSchema = Yup.object().shape({
-    username: Yup.string()
-      .min(3, 'At least than 3 characters')
-      .max(15, 'No more than 15 characters'),
     email: Yup.string().email(),
     password: Yup.string()
       .min(6, 'At least than 6 characters')
@@ -48,7 +45,6 @@ function ModifyUser(data) {
 
   const handleFormSubmit = (values, bag) => {
     var payload = {
-      username: values.username,
       email: values.email,
       old_password: values.old_password,
       password: values.password,
@@ -99,17 +95,6 @@ function ModifyUser(data) {
       >
       {({ isValid, isSubmitting }) => (
         <Form>
-          <br />
-          <ErrorMessage name="username" component="span" />
-          <br />
-          <label htmlFor="username">Name : </label>
-          <Field
-            aria-label="votre nom d'utilisateur"
-            id="username"
-            name="username"
-            placeholder="New name"
-            autoComplete="off"
-          />
           <br />
           <ErrorMessage name="email" component="span" />
           <br />

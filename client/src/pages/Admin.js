@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
+import { UserContext } from "../helpers/userContext"
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Admin() {
-
-  const currentUser = JSON.parse(sessionStorage.getItem("user"));
+  const { userState } = useContext(UserContext);
+  const currentUser = userState;
 
   const [userList, setUserList] = useState([]);
   const [message, setMessage] = useState(null);
@@ -14,11 +15,11 @@ function Admin() {
 
     setMessage("");
 
-    if (!currentUser) {
+    if (!currentUser.isLogged) {
       navigate("/signin");
     };
 
-    if (currentUser) {
+    if (currentUser.isLogged) {
       axios.get("http://localhost:8080/api/admin", { headers : { 'x-access-token': currentUser.accessToken } })
 
         .then((res) => {

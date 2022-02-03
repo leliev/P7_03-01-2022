@@ -1,17 +1,19 @@
-import React, {useState} from "react";
+import React, {useContext} from "react";
+import { UserContext } from "../../helpers/userContext";
 import axios from "axios";
 import Modify from "./Modify";
 import Create from "../Comment/Create";
 
+
 function ActionBar(props) {
+  const {userState} = useContext(UserContext);
+  const user = userState;
+  const element = props.data.element;
 
-  const user = JSON.parse(sessionStorage.getItem("user"));
-  const element = props.props;
+  //const [displayCForm, setDisplayCForm] = useState(false);
+  //const [displayMForm, setDisplayMForm] = useState(false);
 
-  const [displayCForm, setDisplayCForm] = useState(false);
-  const [displayMForm, setDisplayMForm] = useState(false);
-
-  const privilege = user.roles.includes("ROLE_ADMIN")
+  const privilege = user.isAdmin
   const owner = user.username === element.author;
 
   let URL = "";
@@ -31,18 +33,13 @@ function ActionBar(props) {
     const data = JSON.stringify(payload);
     axios.delete(URL + data, { headers : { 'x-access-token': user.accessToken } })
       .then(() => {
-        if (target === "comment") {
-          window.location.reload();
-        } else {
-          window.location.replace("/");
-        };
-        
+        props.data.func()
       }).catch((error) => {
-        console.log(error);
+        console.log(error.response.data.message);
       });
   };
 
-  function toggleForm(e) {
+  /*function toggleForm(e) {
     console.log(e.target.className)
     if (e.target.className === "modify") {
       setDisplayCForm(false)
@@ -51,34 +48,19 @@ function ActionBar(props) {
       setDisplayMForm(false)
       setDisplayCForm(!displayCForm);
     };
-  };
+  };*/
 
   let data = {
     target: target,
     element: element,
-    user: user
+    func: props.data.func
   };
-
-  
 
   return(
     <div>
       {target === "article" ? (
         <>
-          {displayCForm ? (
-            <div>
-              <button className="comment" onClick={(e) => {toggleForm(e)}}>
-                Close form
-              </button>
-              <Create data={data} />
-            </div> 
-          ) : (
-            <>
-              <button className="comment" onClick={(e) => {toggleForm(e)}}>
-                Comment
-              </button>
-            </>
-          )} 
+          <Create data={data} />
         </>
       ) : (
         <></>
@@ -86,21 +68,8 @@ function ActionBar(props) {
 
       {privilege || owner ? (
         <>
-          {displayMForm ? (
-            <div  className="modifyWrapper">
-              <button className="modify" onClick={(e) => {toggleForm(e)}}>
-                Close form
-              </button>
-              <Modify data={data}/>
-            </div> 
-          ) : (
-            <>
-              <button className="modify" onClick={(e) => {toggleForm(e)}}>
-                modify
-              </button>
-              <button onClick={onClickDel}>delete</button>
-            </>
-          )} 
+          <Modify data={data}/>
+          <button onClick={onClickDel}>delete</button>
         </>
       ) : (
         <></>

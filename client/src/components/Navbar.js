@@ -7,19 +7,14 @@ function Navbar() {
 
     //const location = useLocation();
     const { userState } = useContext(UserContext);
-    const user = JSON.parse(sessionStorage.getItem("user"));
+    const user = userState;
     let privilege = null;
 
-    if (!user) {
+    if (!user.isLogged) {
         privilege = false;
     } else {
-        privilege = user.roles.includes("ROLE_ADMIN");
+        privilege = user.isAdmin;
     };
-
-    useEffect(() => {
-        console.log(userState) 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[userState]);
     
     const logout = () => {
         sessionStorage.removeItem("user");
@@ -28,7 +23,7 @@ function Navbar() {
     
     return(
         <nav className="container">
-            {userState ? (
+            {userState.isLogged ? (
             <>
                 <NavLink to={'/'} aria-label="page des articles">
                     Articles

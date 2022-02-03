@@ -11,13 +11,6 @@ module.exports = function(app) {
         next();
     });
 
-    /*Must be logged, profile page
-    //[id, token]
-    app.get("/api/user",
-        [authJwt.verifyToken],
-        controller.userBoard
-    );*/
-    
     //Must be logged
     //[id, token, (params.name)]
     app.get("/api/user/:name", 
@@ -41,7 +34,7 @@ module.exports = function(app) {
     
     //Must be logged and owner or admin, option from profile page
     //[id, token]
-    app.delete("/api/user/delete",
+    app.delete("/api/user/:data",
         [authJwt.verifyToken, ownerOrAdmin],
         controller.userDelete
     );

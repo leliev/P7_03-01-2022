@@ -7,45 +7,45 @@ import ActionBar from "../components/ActionBar";
 
 function Home() {
   
-  const user = JSON.parse(sessionStorage.getItem("user"));
-  const { userState} = useContext(UserContext);
+  
+  const { userState } = useContext(UserContext);
+  const user = userState
   const [message, setMessage] = useState(null);
   const [articleList, setArticleList] = useState([]);
-  const [displayForm, setDisplayForm] = useState(false);
+  const [refresh, setRefresh] = useState(false)
+  
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(userState)
-  },[userState])
 
   useEffect(() => {
-     
+    //Reset message on render
     setMessage("");
-    
-    if (!user) {
+    //If not logged In return to signin
+    if (!user.isLogged) {
       navigate("/signin");
-    };
-
-    if (user) {
+      //Else get article list
+    } else if (user.isLogged) { 
       axios.get("http://localhost:8080/api/article", { headers : { 'x-access-token': user.accessToken } })
 
         .then((res) => {
+          //If list empty set message state with server response and set list empty
           if (res.data.message) {
             setMessage(res.data.message);
             setArticleList([])
+            //We set the article list in the state
           } else {
             setArticleList(res.data);
-          }
+          };
         }).catch((error) => {
           setMessage(error.response.data.message);
           console.log(error);
         });
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  },[refresh]);
 
-  function toggleForm() {
-    setDisplayForm(!displayForm);
+  function toggleRefresh() {
+    setRefresh(!refresh);
   };
 
   return (
@@ -53,23 +53,15 @@ function Home() {
       {message && (
         <span>{message}</span>
       )}
-      {displayForm ? (
-        <div className="articleCreator">
-          <button onClick={toggleForm}>
-            Close form
-          </button>
-          <Create props={user}/>
-        </div> 
-      ) : (
-        <div className="articleCreator">
-          <button onClick={toggleForm}>
-            Share your Story
-          </button>
-        </div>
-      )}
+      <Create func={toggleRefresh}/>
       {articleList && (
         <>
         {articleList.map((article, key) => {
+
+          var data = {
+            element: article,
+            func: toggleRefresh
+          };
           return (
             <div className="articleCard" key={key}>
 
@@ -99,7 +91,7 @@ function Home() {
 
                 <span>Comments : {article.commentCount}</span>
               </div>
-              <ActionBar props={article} />
+              <ActionBar data={data} />
             </div>
           );
         })}

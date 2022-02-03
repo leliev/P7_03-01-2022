@@ -17,7 +17,7 @@ exports.signup = (req, res) => {
     User.create({ ...user })
       .then(user => {
         user.setRoles([1]).then(() => {
-            res.statu(200).json({message: "User registered successfully!"})
+            res.status(200).json({message: "User registered successfully!"})
         });
       }).catch(err => {
           res.status(500).json({error: err.message});
@@ -55,21 +55,21 @@ exports.signin = (req, res) => {
             }
             res.status(200).json({
                 id: user.id,
-                username: user.username,
-                email: user.email,
-                roles: authorities,
-                imageUrl: user.imageUrl,
+                //username: user.username,
+                //email: user.email,
+                //roles: authorities,
+                //imageUrl: user.imageUrl,
                 accessToken: token
                 
             });
         });
     }).catch(err => {
-        res.status(500).json({error: err.message});
+        res.status(500).json({message: err.message});
     });
 };
 
 exports.ctrl = (req, res) => {
-    const userId = req.body.id;
+    const userId = req.userId;
     User.findByPk(userId).then((user) => {
         if (user === null) {
             return res.status(404).json({message: "User not found!"});
@@ -80,10 +80,11 @@ exports.ctrl = (req, res) => {
                     authorities.push("ROLE_" + roles[i].name.toUpperCase());
                 }
                 const userData = {
-                id: user.id,
-                username: user.username,
-                email: user.email,
-                roles: authorities,
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                    roles: authorities,
+                    imageUrl: user.imageUrl,
                 };
 
                 res.status(200).json(userData);

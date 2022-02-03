@@ -1,13 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
+import { UserContext } from "../helpers/userContext";
 import axios from "axios";
 import { useParams, useNavigate, useLocation} from 'react-router-dom';
 import ModifyImage from "../components/User/ModifyImage"
 import ModifyUser from "../components/User/ModifyUser";
+import DeleteUser from "../components/User/DeleteUser";
 
 function Profile() {
 
   let { name } = useParams();
-  const user = JSON.parse(sessionStorage.getItem("user"));
+  const { userState } = useContext(UserContext);
+  const user = userState;
 
   const [message, setMessage] = useState(null);
   const [currentProfile, setCurrentProfile] = useState({});
@@ -21,13 +24,12 @@ function Profile() {
     setMessage("");
     if (name === user.username) {
       setIsOwner(true);
-      console.log(isOwner+ ","+name +","+user.username)
     };
-    if (user.roles.includes("ROLE_ADMIN")) {
+    if (user.isAdmin) {
       setPrivilege(true);
     };
 
-    if (user) {
+    if (user.isLogged) {
       let URL = `http://localhost:8080/api/user/${name}`
 
       console.log(isOwner, privilege)
@@ -73,20 +75,20 @@ function Profile() {
         </div>
       </div>
       <div className="profileFooter">
-            {(privilege || isOwner) && (
-              <>
-                <button>Delete User</button>
-              </>
-            )}
-          {isOwner && (
-            <>
-              <ModifyImage data={data}/>
-              <ModifyUser data={data}/>
-            </>   
-          )}
-          </div>
+        {(privilege || isOwner) && (
+          <>
+            <DeleteUser data={data}/>
+          </>
+        )}
+        {isOwner && (
+          <>
+            <ModifyImage data={data}/>
+            <ModifyUser data={data}/>
+          </>   
+        )}
+      </div>
     </>
   );
-}
+};
 
 export default Profile;

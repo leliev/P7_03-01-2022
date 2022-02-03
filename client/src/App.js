@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { UserContext } from "./helpers/userContext";
-import { useLocation } from "react-router-dom";
-//import { UserProvider } from "./helpers/userContext";
+//import { useLocation } from "react-router-dom";
+import axios from "axios";
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
 import Routes from "./components/Routes";
@@ -11,20 +11,48 @@ import "./App.css";
 
 function App() {
 
-  const [userState, setUserState] = useState(false);
-  //const { userState, setUserState } = useContext(UserContext);
-  const location = useLocation();
+  const [userState, setUserState] = useState({
+    id: 0,
+    username: '',
+    email: '',
+    imageUrl: '',
+    accessToken: '',
+    isAdmin: false,
+    isLogged: false,
+  });
+
+  //const location = useLocation();
 
   useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem("user"));
-    if (user) {
-      setUserState(true);
-  }else {
-    setUserState(false)
-  }
-  console.log(userState)
+    
+    if ((user !== null) && !userState.isLogged) {
+      console.log("setting context again")
+      const payload = { "element": user.id, "user": user.id };
+      const data = JSON.stringify(payload);
+      axios.get(`http://localhost:8080/api/auth`, { headers : { 'x-access-token': user.accessToken } })
+        .then((res) => {
+          const privilege = res.data.roles.includes("ROLE_ADMIN")
+          setUserState({
+            id: res.data.id,
+            username: res.data.username,
+            email: res.data.email,
+            imageUrl: res.data.imageUrl,
+            accessToken: user.accessToken,
+            isAdmin: privilege,
+            isLogged: true,
+          });
+        })
+      
+    }else if (user === null || !user) { 
+      setUserState({
+        ...userState,
+        isLogged: false,
+      });
+    };
+    console.log(userState)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[location])
+  },[])
 
   return (
     <UserContext.Provider value={{ userState, setUserState }}>
