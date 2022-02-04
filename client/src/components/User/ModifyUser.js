@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, {useState, useContext} from "react";
+import { UserContext } from "../../helpers/userContext";
 import axios from "axios";
 import * as Yup from "yup"
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -6,7 +7,10 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 function ModifyUser(data) {
 
   const props = data.data;
-  const [message, setMessage] = useState(null);
+  const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
+  const { userState } = useContext(UserContext);
+  const user = userState;
+  const [displayForm, setDisplayForm] = useState(false);
 
   const initialValues = {
     username: "",
@@ -62,97 +66,106 @@ function ModifyUser(data) {
     removeEmptyKeys(values);
 
     if (Object.keys(payload).length === 0) {
-      setMessage("You must at least update one field!")
+      props.error("You must at least update one field!")
     } else {
       console.log(payload)
       const prepData = new FormData();
-      prepData.append('id', props.user.id);
+      prepData.append('id', user.id);
       Object.keys(payload).map((key) => {
         prepData.append(key, payload[key])
         return prepData
       });
       console.log(prepData)
       axios.put(`http://localhost:8080/api/user/${props.currentProfile.targetId}`, 
-        prepData, { headers : { 'x-access-token': props.user.accessToken } 
+        prepData, { headers : { 'x-access-token': accessToken } 
       }).then((res) => {
-        window.location.replace(`/user/${props.currentProfile.username}`);
+        props.func();
+        toggleForm();
       }).catch((error) => {
-        console.log(error.response.data.message || "user update failed");
+        props.error(error.response.data.message);
       });
     };
     bag.setSubmitting(false);
   };
 
+  function toggleForm() {
+    setDisplayForm(!displayForm);
+  };
+
   return (
-    <div>
-      {message && (
-        <span>{message}</span>
-      )}
-      <Formik
-        initialValues={initialValues}
-        validationSchema={formSchema}
-        onSubmit={handleFormSubmit}
-      >
-      {({ isValid, isSubmitting }) => (
-        <Form>
-          <br />
-          <ErrorMessage name="email" component="span" />
-          <br />
-          <label htmlFor="email">E-mail : </label>
-          <Field
-            aria-label="votre adresse email"
-            id="email"
-            name="email"
-            placeholder="E mail"
-            autoComplete="off"
-          />
-          <br />
-          <ErrorMessage name="old_password" component="span" />
-          <br />
-          <label htmlFor="old_password">Old Password : </label>
-          <Field
-            aria-label="votre ancien mot de passe"
-            id="old_password"
-            type="password"
-            name="old_password"
-            placeholder="Old Password"
-            autoComplete="off"
-          />
-          <br />
-          <ErrorMessage name="password" component="span" />
-          <br />
-          <label htmlFor="password">New password : </label>
-          <Field
-            aria-label="votre nouveau mot de passe"
-            id="password"
-            type="password"
-            name="password"
-            placeholder="New password"
-            autoComplete="off"
-          />
-          <br />
-          <ErrorMessage name="password_confirmation" component="span" />
-          <br />
-          <label htmlFor="password_confirmation">Confirmation : </label>
-          <Field
-            aria-label="confirmez votre mot de passe"
-            id="password_confirmation"
-            type="password"
-            name="password_confirmation"
-            placeholder="Confirmation"
-            autoComplete="off"
-          />
-          <br/>
-          <button
-            disabled={!isValid || isSubmitting}
-            type="submit"
+    <>
+      {displayForm ? (
+        <>
+          <button onClick={toggleForm}>Update user</button>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={formSchema}
+            onSubmit={handleFormSubmit}
           >
-            Modify
-          </button>
-        </Form>
+          {({ isValid, isSubmitting, touched, errors }) => (
+            <Form>
+              <br />
+              <ErrorMessage name="email" component="span" />
+              <br />
+              <label htmlFor="email">E-mail : </label>
+              <Field
+                aria-label="votre adresse email"
+                id="email"
+                name="email"
+                placeholder="E mail"
+                autoComplete="off"
+              />
+              <br />
+              <ErrorMessage name="old_password" component="span" />
+              <br />
+              <label htmlFor="old_password">Old Password : </label>
+              <Field
+                aria-label="votre ancien mot de passe"
+                id="old_password"
+                type="password"
+                name="old_password"
+                placeholder="Old Password"
+                autoComplete="off"
+              />
+              <br />
+              <ErrorMessage name="password" component="span" />
+              <br />
+              <label htmlFor="password">New password : </label>
+              <Field
+                aria-label="votre nouveau mot de passe"
+                id="password"
+                type="password"
+                name="password"
+                placeholder="New password"
+                autoComplete="off"
+              />
+              <br />
+              <ErrorMessage name="password_confirmation" component="span" />
+              <br />
+              <label htmlFor="password_confirmation">Confirmation : </label>
+              <Field
+                aria-label="confirmez votre mot de passe"
+                id="password_confirmation"
+                type="password"
+                name="password_confirmation"
+                placeholder="Confirmation"
+                autoComplete="off"
+              />
+              <br/>
+              <button
+                disabled={!isValid || isSubmitting}
+                type="submit"
+              >
+                Modify
+              </button>
+            </Form>
+          )}
+          </Formik>
+        </>
+      ) : (
+        <button onClick={toggleForm}>Update user</button>
       )}
-      </Formik>
-    </div>
+    </>
   );
 };
 

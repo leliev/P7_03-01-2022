@@ -21,16 +21,13 @@ function App() {
     isLogged: false,
   });
 
-  //const location = useLocation();
-
   useEffect(() => {
-    const user = JSON.parse(sessionStorage.getItem("user"));
+    const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
     
-    if ((user !== null) && !userState.isLogged) {
+    if ((accessToken !== null) && !userState.isLogged) {
       console.log("setting context again")
-      const payload = { "element": user.id, "user": user.id };
-      const data = JSON.stringify(payload);
-      axios.get(`http://localhost:8080/api/auth`, { headers : { 'x-access-token': user.accessToken } })
+      
+      axios.get(`http://localhost:8080/api/auth`, { headers : { 'x-access-token': accessToken } })
         .then((res) => {
           const privilege = res.data.roles.includes("ROLE_ADMIN")
           setUserState({
@@ -38,13 +35,12 @@ function App() {
             username: res.data.username,
             email: res.data.email,
             imageUrl: res.data.imageUrl,
-            accessToken: user.accessToken,
             isAdmin: privilege,
             isLogged: true,
           });
         })
       
-    }else if (user === null || !user) { 
+    }else if (accessToken === null || !accessToken) { 
       setUserState({
         ...userState,
         isLogged: false,

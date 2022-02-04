@@ -11,9 +11,10 @@ function Profile() {
   let { name } = useParams();
   const { userState } = useContext(UserContext);
   const user = userState;
-
+  const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
   const [message, setMessage] = useState(null);
   const [currentProfile, setCurrentProfile] = useState({});
+  const [refresh, setRefresh] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [privilege, setPrivilege] = useState(false);
   
@@ -21,7 +22,13 @@ function Profile() {
   const location = useLocation();
   
   useEffect(() => {
+
     setMessage("");
+
+    if (accessToken === null || !accessToken) { 
+      window.location.replace("/signin")
+    };
+    
     if (name === user.username) {
       setIsOwner(true);
     };
@@ -33,7 +40,7 @@ function Profile() {
       let URL = `http://localhost:8080/api/user/${name}`
 
       console.log(isOwner, privilege)
-      axios.get(URL, { headers : { 'x-access-token': user.accessToken } })
+      axios.get(URL, { headers : { 'x-access-token': accessToken } })
         .then((res) => {
           setCurrentProfile(res.data)
         }).catch((error) => {
@@ -44,22 +51,26 @@ function Profile() {
       navigate("/signin");
     };  
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[location]);
+  },[location, refresh]);
 
-  
-
-  let data = {
-    currentProfile: currentProfile,
-    user: user
+  function toggleRefresh() {
+    setRefresh(!refresh);
   };
+  
+  const data = {
+    currentProfile: currentProfile,
+    func: toggleRefresh,
+    error: setMessage
+  };
+
   console.log("has privilege"+privilege, "isOwner:"+isOwner)
   return (
     <>
+      {message && (
+        <span>{message}</span>
+      )}
       <h1>Profile page</h1>
       <div className="profileCard">
-        {message && (
-          <span>{message}</span>
-        )}
         <div className="imageCard">
           <img src={currentProfile.imageUrl} alt="user profile"/>
         </div>

@@ -18,6 +18,11 @@ function Home() {
 
 
   useEffect(() => {
+    
+    const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
+    if (accessToken === null || !accessToken) { 
+      window.location.replace("/signin")
+    };
     //Reset message on render
     setMessage("");
     //If not logged In return to signin
@@ -25,7 +30,7 @@ function Home() {
       navigate("/signin");
       //Else get article list
     } else if (user.isLogged) { 
-      axios.get("http://localhost:8080/api/article", { headers : { 'x-access-token': user.accessToken } })
+      axios.get("http://localhost:8080/api/article", { headers : { 'x-access-token': accessToken } })
 
         .then((res) => {
           //If list empty set message state with server response and set list empty

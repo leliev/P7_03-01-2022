@@ -1,11 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "../helpers/userContext";
 import { NavLink } from "react-router-dom";
 
 
 function Navbar() {
 
-    //const location = useLocation();
     const { userState } = useContext(UserContext);
     const user = userState;
     let privilege = null;
@@ -17,7 +16,7 @@ function Navbar() {
     };
     
     const logout = () => {
-        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("accessToken");
         window.location.replace('/');
     };
     

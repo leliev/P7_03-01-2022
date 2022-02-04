@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { customSchema } from "../../helpers/Schema/customSchema";
 
 function Modify(data) {
+  const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
   const {userState} = useContext(UserContext);
   const user = userState;
   const props = data.data
@@ -32,7 +33,7 @@ function Modify(data) {
       id: user.id
     };
 
-    axios.put(URL + props.element.id, payload, { headers : { 'x-access-token': user.accessToken } })
+    axios.put(URL + props.element.id, payload, { headers : { 'x-access-token': accessToken } })
       .then((response) => {
         console.log(response.data.message);
         toggleForm();

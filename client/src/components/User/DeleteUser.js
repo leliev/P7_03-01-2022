@@ -1,14 +1,20 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
+import { UserContext } from "../../helpers/userContext";
 import axios from "axios";
 import * as Yup from "yup"
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useNavigate } from "react-router-dom"
 
 
 function DeleteUser(data) {
 
     const props = data.data;
+    const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
+    const { userState } = useContext(UserContext);
+    const user = userState;
     const URL = "http://localhost:8080/api/user/"
     const [confirm, setConfirm] = useState(false);
+    const navigate = useNavigate();
 
     const toggleConfirm = () => {
         setConfirm(!confirm)
@@ -19,19 +25,19 @@ function DeleteUser(data) {
 
         console.log("field value:" + JSON.stringify(value))
         console.log(props.currentProfile)
-        const payload = { "element": props.currentProfile.targetId, "user": props.user.id };
+        const payload = { "element": props.currentProfile.targetId, "user": user.id };
         const data = JSON.stringify(payload);
         console.log("data:" +  data);
-        axios.delete(URL + data, { headers : { 'x-access-token': props.user.accessToken } })
+        axios.delete(URL + data, { headers : { 'x-access-token': accessToken } })
           .then(() => {
-              if (props.currentProfile.targetId === props.user.id) {
+              if (props.currentProfile.targetId === user.id) {
                 sessionStorage.removeItem("user");
-                window.location.replace('/');
+                navigate('/');
               } else {
-                window.location.replace("/");
+                navigate('/admin');
               };
           }).catch((error) => {
-            console.log(error.response.data.message);
+            props.data.error(error.response.data.message);
           });
       };
 

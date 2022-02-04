@@ -10,7 +10,7 @@ function Article() {
   const { userState } = useContext(UserContext)
   const user = userState;
   const likeData = {id: user.id};
-
+  const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
   const [message, setMessage] = useState(null);
   const [article, setArticle] = useState({});
   const [commentList, setCommentList] = useState([]);
@@ -19,12 +19,18 @@ function Article() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user.isLogged) {
 
+    setMessage("");
+
+    if (accessToken === null || !accessToken) { 
+      window.location.replace("/signin")
+    };
+
+    if (user.isLogged) {
       const payload = { "element": id, "user": user.id };
       const data = JSON.stringify(payload);
 
-      axios.get(`http://localhost:8080/api/article/${data}`, { headers : { 'x-access-token': user.accessToken } })
+      axios.get(`http://localhost:8080/api/article/${data}`, { headers : { 'x-access-token': accessToken } })
         .then((res) => {
           const likeValue = res.data.isLiked;
           setLiked(likeValue);
@@ -38,7 +44,7 @@ function Article() {
           console.log(res.data.article)
         }).catch((error) => {
           setMessage(error.response.data.message);
-          console.log(error);
+          navigate('/');
         });
     } else {
       navigate("/signin");
@@ -47,7 +53,7 @@ function Article() {
   }, [liked, refresh])
 
   function handleClick() {
-    axios.put(`http://localhost:8080/api/like/${article.id}`, likeData, { headers : { 'x-access-token': user.accessToken } })
+    axios.put(`http://localhost:8080/api/like/${article.id}`, likeData, { headers : { 'x-access-token': accessToken } })
       .then((response) => {
         console.log(response.data.message);
         setLiked(!liked)

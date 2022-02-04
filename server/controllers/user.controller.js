@@ -104,7 +104,7 @@ exports.updateUser = async (req, res) => {
     if (Object.keys(userObject).length !== 0) {
       console.log("new user data:" + JSON.stringify(userObject))
       User.update({ ...userObject }, { where: { id: userId } }).then(rows => {
-        if (rows == 1) {
+        if (rows == Object.keys(userObject).length) {
           res.status(200).send({
             message: "User was updated successfully."
           });

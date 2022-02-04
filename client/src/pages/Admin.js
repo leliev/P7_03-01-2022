@@ -6,7 +6,7 @@ import axios from "axios";
 function Admin() {
   const { userState } = useContext(UserContext);
   const currentUser = userState;
-
+  const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
   const [userList, setUserList] = useState([]);
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
@@ -15,12 +15,12 @@ function Admin() {
 
     setMessage("");
 
-    if (!currentUser.isLogged) {
-      navigate("/signin");
+    if (accessToken === null || !accessToken) { 
+      window.location.replace("/signin")
     };
 
     if (currentUser.isLogged) {
-      axios.get("http://localhost:8080/api/admin", { headers : { 'x-access-token': currentUser.accessToken } })
+      axios.get("http://localhost:8080/api/admin", { headers : { 'x-access-token': accessToken } })
 
         .then((res) => {
           setUserList(res.data);
@@ -44,6 +44,9 @@ function Admin() {
         {userList.map((user, key) => {
           return (
             <div className="userCard" key={key} onClick={() => {navigate(`/user/${user.username}`)}}>
+              <div className="imageCard">
+                <img src={user.imageUrl} alt="user profile"/>
+              </div>
               <div className="userBody">
                 <h3>{user.username}</h3>
                 <span>Email : {user.email}</span>

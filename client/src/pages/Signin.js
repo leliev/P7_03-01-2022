@@ -28,12 +28,12 @@ function Signin() {
       .then((res) => {
         
         if (res.data) {
-          const user = {
+          /*const user = {
             id: res.data.id,
             accessToken: res.data.accessToken
-          };
-          sessionStorage.setItem("user", JSON.stringify(user));
-          console.log("session:" + user)
+          };*/
+          sessionStorage.setItem("accessToken", JSON.stringify(res.data.accessToken));
+          console.log("session:" + res.data.accessToken)
           window.location.replace('/');
         };
 

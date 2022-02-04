@@ -6,12 +6,10 @@ import Create from "../Comment/Create";
 
 
 function ActionBar(props) {
+  const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
   const {userState} = useContext(UserContext);
   const user = userState;
   const element = props.data.element;
-
-  //const [displayCForm, setDisplayCForm] = useState(false);
-  //const [displayMForm, setDisplayMForm] = useState(false);
 
   const privilege = user.isAdmin
   const owner = user.username === element.author;
@@ -31,24 +29,13 @@ function ActionBar(props) {
 
     const payload = { "element": element.id, "user": user.id };
     const data = JSON.stringify(payload);
-    axios.delete(URL + data, { headers : { 'x-access-token': user.accessToken } })
+    axios.delete(URL + data, { headers : { 'x-access-token': accessToken } })
       .then(() => {
-        props.data.func()
+        props.data.func();
       }).catch((error) => {
         console.log(error.response.data.message);
       });
   };
-
-  /*function toggleForm(e) {
-    console.log(e.target.className)
-    if (e.target.className === "modify") {
-      setDisplayCForm(false)
-      setDisplayMForm(!displayMForm);
-    } else {
-      setDisplayMForm(false)
-      setDisplayCForm(!displayCForm);
-    };
-  };*/
 
   let data = {
     target: target,
