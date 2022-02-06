@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { customSchema } from "../../helpers/Schema/customSchema";
 
 function Modify(data) {
+
   const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
   const {userState} = useContext(UserContext);
   const user = userState;
@@ -12,14 +13,15 @@ function Modify(data) {
   const [displayForm, setDisplayForm] = useState(false);
   const [message, setMessage] = useState(null);
 
-
+  //From imported validation schema
   const validationSchema = customSchema;
+  //Initial form value = old content
   const initialValues = {
     content: props.element.content
   };
 
   let URL = "";
-
+  //Set url base on targeted element
   if (props.target === "article") {
     URL = process.env.REACT_APP_BASE_URL + "/article/";
   } else {
@@ -27,7 +29,7 @@ function Modify(data) {
   };
 
   const onSubmit = (data) => {
-    //console.log(data)
+    //Set data to send
     const payload = {
       ...data,
       id: user.id
@@ -35,15 +37,17 @@ function Modify(data) {
 
     axios.put(URL + props.element.id, payload, { headers : { 'x-access-token': accessToken } })
       .then((response) => {
+        //Close form and initiate refresh
         console.log(response.data.message);
         toggleForm();
         props.func();
 
       }).catch((error) => {
+        //Or set error message to display
         setMessage(error.response.data.message);
       });
   };
-
+  //Manage form display
   function toggleForm() {
     setDisplayForm(!displayForm);
   };

@@ -6,6 +6,7 @@ import Create from "../components/Article/Create";
 import ActionBar from "../components/ActionBar";
 
 function Article() {
+
   let { id } = useParams();
   const { userState } = useContext(UserContext)
   const user = userState;
@@ -19,39 +20,41 @@ function Article() {
   const navigate = useNavigate();
 
   useEffect(() => {
-
+    //Reset message on render
     setMessage("");
-
+    //Check for user token in session if not redirect to signin
     if (accessToken === null || !accessToken) { 
       window.location.replace("/signin")
     };
-
+    //And again check context for displaying page info
     if (user.isLogged) {
       const payload = { "element": id, "user": user.id };
       const data = JSON.stringify(payload);
-
+      //Get article data
       axios.get(process.env.REACT_APP_BASE_URL + `/article/${data}`, { headers : { 'x-access-token': accessToken } })
         .then((res) => {
+          //Set the user like value in state, relative to current article
           const likeValue = res.data.isLiked;
           setLiked(likeValue);
-
+          //Set article data in state
           const currentArticle = res.data.article;
           setArticle(currentArticle);
-
+          //Set comment list related to article
           const comments = currentArticle.comments;
           setCommentList(comments);
 
           console.log(res.data.article)
         }).catch((error) => {
+          //Or save error message in state to display
           setMessage(error.response.data.message);
-          navigate('/');
         });
     } else {
+      //Redirect if not logged in context info
       navigate("/signin");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [liked, refresh])
-
+  }, [liked, refresh]) //Trigger specified rerender
+  //On click function to manage like 
   function handleClick() {
     axios.put(process.env.REACT_APP_BASE_URL + `/like/${article.id}`, likeData, { headers : { 'x-access-token': accessToken } })
       .then((response) => {
@@ -62,11 +65,11 @@ function Article() {
         console.log(error);
       });
   };
-
+  //To clean up after a change and refresh component info
   function toggleRefresh() {
     setRefresh(!refresh);
   };
-
+  //Props setting
   var data = {
     element: article,
     func: toggleRefresh

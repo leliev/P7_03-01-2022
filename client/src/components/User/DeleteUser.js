@@ -5,51 +5,55 @@ import * as Yup from "yup"
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useNavigate } from "react-router-dom"
 
-
 function DeleteUser(data) {
 
-    const props = data.data;
-    const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
-    const { userState } = useContext(UserContext);
-    const user = userState;
-    const URL = process.env.REACT_APP_BASE_URL + "/user/"
-    const [confirm, setConfirm] = useState(false);
-    const navigate = useNavigate();
+  const props = data.data;
+  const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
+  const { userState } = useContext(UserContext);
+  const user = userState;
+  const URL = process.env.REACT_APP_BASE_URL + "/user/"
+  const [confirm, setConfirm] = useState(false);
+  const navigate = useNavigate();
 
-    const toggleConfirm = () => {
-        setConfirm(!confirm)
-    };
+  //Manage the confirm form display
+  const toggleConfirm = () => {
+    setConfirm(!confirm)
+  };
 
+  const onClickDel = (value) => {
 
-    const onClickDel = (value) => {
-
-        console.log("field value:" + JSON.stringify(value))
-        console.log(props.currentProfile)
-        const payload = { "element": props.currentProfile.targetId, "user": user.id };
-        const data = JSON.stringify(payload);
-        console.log("data:" +  data);
-        axios.delete(URL + data, { headers : { 'x-access-token': accessToken } })
-          .then(() => {
-              if (props.currentProfile.targetId === user.id) {
-                sessionStorage.removeItem("accessToken");
-                navigate('/');
-              } else {
-                navigate('/admin');
-              };
-          }).catch((error) => {
-            props.data.error(error.response.data.message);
-          });
-      };
-
-      const initialValues = {
-        confirm: ""
-      };
-
-      const confirmSchema = Yup.object().shape({
-        confirm: Yup.string()
-          .matches(/confirm/, "You must type 'confirm'")
-          .required("Please confirm")
+    console.log("field value:" + JSON.stringify(value))
+    console.log(props.currentProfile)
+    //Set params to send
+    const payload = { "element": props.currentProfile.targetId, "user": user.id };
+    const data = JSON.stringify(payload);
+    console.log("data:" +  data);
+    //Send the delete user request
+    axios.delete(URL + data, { headers : { 'x-access-token': accessToken } })
+      .then(() => {
+        //If current user is the target of delete activate logout
+        if (props.currentProfile.targetId === user.id) {
+          sessionStorage.removeItem("accessToken");
+          navigate('/');
+        } else {
+          //Else user should be admin and navigate to admin page
+          navigate('/admin');
+        };
+      }).catch((error) => {
+        //Or save error message in state to display
+        props.data.error(error.response.data.message);
       });
+  };
+  //Initial confirm value
+  const initialValues = {
+    confirm: ""
+  };
+  //Simple validation schema validate only on "confirm" value
+  const confirmSchema = Yup.object().shape({
+    confirm: Yup.string()
+      .matches(/confirm/, "You must type 'confirm'")
+      .required("Please confirm")
+  });
 
   return (
     <>
@@ -84,7 +88,7 @@ function DeleteUser(data) {
         </Formik>
       )}
     </> 
-    );
+  );
 };
 
 export default DeleteUser;

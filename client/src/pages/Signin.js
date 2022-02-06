@@ -14,16 +14,19 @@ function Signin() {
   let navigate = useNavigate();
   
   useEffect(() => {
+    //Check context if user is logged
     const user = userState;
     if (user.isLogged) {
+      //And redirect to home if true
       navigate("/")
     };
   });
-
+  //Initial form value
   const initialValues = {
     username: '',
     password: '',
   };
+  
   const validationSchema = signinSchema;
 
   const onSubmit = (data) => {
@@ -31,12 +34,14 @@ function Signin() {
       .then((res) => {
         
         if (res.data) {
+          //Set token in session storage and navigate to home
           sessionStorage.setItem("accessToken", JSON.stringify(res.data.accessToken));
           console.log("session:" + res.data.accessToken)
           window.location.replace('/');
         };
 
       }).catch((error) => {
+        //Or set message error to display
         setMessage(error.response.data.message);
       });
   };

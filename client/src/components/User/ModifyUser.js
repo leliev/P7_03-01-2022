@@ -12,6 +12,7 @@ function ModifyUser(data) {
   const user = userState;
   const [displayForm, setDisplayForm] = useState(false);
 
+  //Initial form values
   const initialValues = {
     username: "",
     email: "",
@@ -19,7 +20,7 @@ function ModifyUser(data) {
     password: "",
     password_confirmation: ""
   };
-
+  //Validation schema similar to user signup
   const formSchema = Yup.object().shape({
     email: Yup.string().email(),
     password: Yup.string()
@@ -48,13 +49,14 @@ function ModifyUser(data) {
   });
 
   const handleFormSubmit = (values, bag) => {
+    //Set the data in temporary object
     var payload = {
       email: values.email,
       old_password: values.old_password,
       password: values.password,
       password_confirmation: values.password_confirmation
     }
-
+    //Clean empty key from object
     function removeEmptyKeys(values) {
       Object.keys(values).map((key)=> {
       if(payload && payload[key] === "") {
@@ -62,12 +64,12 @@ function ModifyUser(data) {
       };
       return payload
     })};
-
     removeEmptyKeys(values);
-
+    //If no key left no data where entered send error message
     if (Object.keys(payload).length === 0) {
       props.error("You must at least update one field!")
     } else {
+      //Format the data to send with user ID and cleaned up object
       console.log(payload)
       const prepData = new FormData();
       prepData.append('id', user.id);
@@ -76,18 +78,22 @@ function ModifyUser(data) {
         return prepData
       });
       console.log(prepData)
+      //Send the data to server for update
       axios.put(process.env.REACT_APP_BASE_URL + `/user/${props.currentProfile.targetId}`, 
         prepData, { headers : { 'x-access-token': accessToken } 
       }).then((res) => {
+        //If success close form and activate refresh
         props.func();
         toggleForm();
       }).catch((error) => {
+        //Or save error message in state to display
         props.error(error.response.data.message);
       });
     };
+    //Set formik submit state off
     bag.setSubmitting(false);
   };
-
+  //Form display action
   function toggleForm() {
     setDisplayForm(!displayForm);
   };

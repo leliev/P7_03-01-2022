@@ -18,12 +18,14 @@ verifyToken = (req, res, next) => {
                 });
             };
             switch (req.method) {
+                //If request method is get => less protected routes
                 case "GET":
                     console.log("get route jwt")
                     req.userId = decoded.id;
                     next();
                     
                     break;
+                //Check if user from token is the same as request creator
                 case "DELETE":
                     console.log("delete route JWT")
                     if (req.params.data) {
@@ -35,6 +37,7 @@ verifyToken = (req, res, next) => {
                         } else {
                             next();
                         };
+                    //safety net
                     } else {
                         console.log("get route jwt")
                         req.userId = decoded.id;
@@ -42,7 +45,7 @@ verifyToken = (req, res, next) => {
                     };
                     
                     break;
-        
+                //Compare request id with token id
                 case "PUT":
         
                 case "POST":
@@ -61,7 +64,7 @@ verifyToken = (req, res, next) => {
         });
     }; 
 };
-
+//Check for admin privileges
 isAdmin = (req, res, next) => {
     const userId = req.userId
     console.log("isAdmin userId"+ userId + req.userId)

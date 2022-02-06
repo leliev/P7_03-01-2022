@@ -3,26 +3,22 @@ import { UserContext } from "../helpers/userContext";
 import { NavLink, useLocation } from "react-router-dom";
 import "../styles/Navbar.css"
 
-
 function Navbar() {
 
     const { userState } = useContext(UserContext);
     const user = userState;
     const location = useLocation();
     const [active, setActive] = useState("")
-    let privilege = null;
     let activePath = toString(location.pathname.split("/")[1]);
-    if (!user.isLogged) {
-        privilege = false;
-    } else {
-        privilege = user.isAdmin;
-    };
+
     useEffect(() => {
-        //activePath = toString(location.pathname.split("/")[1]);
+        //Store location to display active navbar link
         setActive(activePath)
-        console.log(active)
+        console.log(user)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[location])
+    },[location])//Trigger specified rerender
+
+    //Logout function that destroy session storage
     const logout = () => {
         sessionStorage.removeItem("accessToken");
         window.location.replace('/');
@@ -30,7 +26,7 @@ function Navbar() {
     
     return(
         <nav className="container">
-            {userState.isLogged ? (
+            {user.isLogged ? (
             <>
                 <NavLink to={'/'} className={!active  && "active"} aria-label="page des articles">
                     Articles
@@ -38,7 +34,7 @@ function Navbar() {
                 <NavLink to={`/user/${user.username}`} className={(active === "user") && "active"} aria-label="page de profile">
                     Profile
                 </NavLink>
-                {privilege && (
+                {user.isAdmin && (
                     <NavLink to={'/admin'} className={(active === "admin") && "active"} aria-label="page administrateur">
                         Admin
                     </NavLink>

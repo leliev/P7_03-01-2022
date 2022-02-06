@@ -10,7 +10,7 @@ module.exports = function(app) {
         next();
     });
 
-    //[username, email, password]
+    //Sign Up user
     app.post("/api/auth/signup",
         [
             verifySignUp.checkDuplicateUser,
@@ -18,10 +18,10 @@ module.exports = function(app) {
         controller.signup
     );
     
-    //[username, password]
+    //Sign In user
     app.post("/api/auth/signin", controller.signin);
 
-    //[token]
+    //Control route for session retrieval
     app.get("/api/auth",
         [authJwt.verifyToken],
         controller.ctrl

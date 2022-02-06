@@ -10,30 +10,24 @@ module.exports = function(app) {
         );
         next();
     });
-
-    //Must be logged
-    //[id, token, (params.name)]
+    //To get one user
     app.get("/api/user/:name", 
         [authJwt.verifyToken],
         controller.getUserByName
     );
-
-    //Must be logged and admin, admin page get all users
-    //[id, token]
+    //To get list of all users
     app.get("/api/admin",
         [authJwt.verifyToken, authJwt.isAdmin],
         controller.adminBoard
 
     );
-
+    //Updates user info
     app.put("/api/user/:id",
         upload.single('image'),
         [authJwt.verifyToken, ownerOrAdmin],
         controller.updateUser
     );
-    
-    //Must be logged and owner or admin, option from profile page
-    //[id, token]
+    //Delete user
     app.delete("/api/user/:data",
         [authJwt.verifyToken, ownerOrAdmin],
         controller.userDelete

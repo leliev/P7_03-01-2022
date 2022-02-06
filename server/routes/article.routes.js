@@ -10,43 +10,37 @@ module.exports = function(app) {
         next();
     });
 
-    //Must be logged, result of article page
-    //[id, token]
+    //Get list of all articles
     app.get("/api/article",
         [authJwt.verifyToken],
         controller.getAllArticles
     );
 
-    //Must be logged, option from user profile page
-    //[id, token, targetUserId]
+    //Get a list of user specific articles !!NOT IMPLEMENTED !!
     app.get("/api/article/user_article",
         [authJwt.verifyToken],
         controller.getUserArticles
     );
 
-    //Must be logged, onclick on article
-    //[id, token, (params.id)]
+    //Get article by ID
     app.get("/api/article/:data",
         [authJwt.verifyToken],
         controller.getArticleById
     );
 
-    //Must be logged, option from article page
-    //[id, token, title, content]
+    //Post article
     app.post("/api/article",
         [authJwt.verifyToken],
         controller.createArticle
     );
 
-    //Must be logged and owner or admin, option from unique article page
-    //[id, token, content]
+    //Update article route
     app.put("/api/article/:id",
         [authJwt.verifyToken, ownerOrAdmin],
         controller.updateArticle
     );
 
-    //Must be logged and owner or admin, option from unique article page
-    //[id, token]
+    //Delete article route
     app.delete("/api/article/:data",
         [authJwt.verifyToken, ownerOrAdmin],
         controller.deleteArticle

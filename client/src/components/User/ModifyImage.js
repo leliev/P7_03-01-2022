@@ -12,22 +12,23 @@ function ModifyImage(data) {
   const [displayForm, setDisplayForm] = useState(false);
 
   const handleUpload = (event) => {
-
     event.preventDefault();
-
+    //Set data to send as form data
     const payload = new FormData();
     payload.append('id', user.id);
     payload.append('image', image);
-
+    //Send to server
     axios.put(process.env.REACT_APP_BASE_URL + `/user/${props.currentProfile.targetId}`, payload, { headers : { 'x-access-token': accessToken } })
       .then((res) => {
+        //If success close form and activate refresh
         props.func();
         toggleForm();
       }).catch((error) => {
+        //Or save error message in state to display
         props.error(error.response.data.message);
       });
   };
-
+  //Form display action
   function toggleForm() {
     setDisplayForm(!displayForm);
     setImage();
@@ -47,7 +48,6 @@ function ModifyImage(data) {
                   <img src={image? URL.createObjectURL(image) : null} alt={image? image.name : null} id="profile_preview"/>
                 </div>
               )}
-              
               <input
                 type="file"
                 id="image"

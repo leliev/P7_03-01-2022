@@ -5,18 +5,20 @@ const User = db.user;
 const Like = db.like;
 const Comment = db.comment;
 
+//Article creation
 exports.createArticle = (req, res) => {
   const userId = req.body.id;
   const title = req.body.title;
   const content = req.body.content;
-
+  //If no data send error
   if (!title || !content) {
     res.status(400).send({message: "Content required"});
   };
-
+  //Check if same title already exist
   Article.findOne({
       where: {title: title}
   }).then(article => {
+    //If not complete data with author info
     if (article === null || !article) {
       User.findOne({
         where: { id: userId}
@@ -27,8 +29,10 @@ exports.createArticle = (req, res) => {
           author: user.username,
           userId: userId
         };
+        //Save data in database
         Article.create({...article})
           .then(article => {
+            //And create affiliated like 
             Like.create({articleId: article.id})
               .then(() => {
                   res.status(200).send({message: "Article created"});
@@ -43,6 +47,7 @@ exports.createArticle = (req, res) => {
       }).catch(err => {
         res.status(404).send({message: err.message || "Error referencing current user"});
       });
+      //Send error if title already exist
     } else {
       res.status(400).send({ message: "Title already in use"});
     };
@@ -50,18 +55,21 @@ exports.createArticle = (req, res) => {
     res.status(500).send({message: err.message});
   });
 };
-
+//Get list of all articles in database
 exports.getAllArticles = (req, res) => {
     Article.findAll({
+      //Include affiliated comments and like
         include: [
           {model: Like, attributes:["id", "value"]},
           {model: Comment, attributes: []}
         ],
+        //Number of articles as custom attribute
         attributes: {
           include: [[Sequelize.fn('COUNT', Sequelize.col('comments.articleId')), 'commentCount']]
         },
         group: ['id']
     }).then(articleList => {
+        //If no article present send a response message
         if (articleList.length === 0 || !articleList) {
             res.status(200).send({ message: "No articles to display"} )
         } else {
@@ -74,7 +82,7 @@ exports.getAllArticles = (req, res) => {
         });
     });
 };
-
+//NOT IMPLEMENTED
 exports.getUserArticles = (req, res) => {
     const userId = req.body.targetUserId;
     Article.findAll({
@@ -98,7 +106,7 @@ exports.getUserArticles = (req, res) => {
         });
     });
 };
-
+//Get one article by his ID
 exports.getArticleById = (req, res) => {
 
     const data = JSON.parse(req.params.data);
@@ -109,15 +117,14 @@ exports.getArticleById = (req, res) => {
 
         .then(article => {
             if (!article) {
-
                 res.status(404).send({message: "No such article"});
             } else {
-
+              //If article was found check if request user has liked article or not
               const currentLike = article.like
               User.findByPk(userId).then((user) => {
 
                 currentLike.hasUser(user).then((isLiked) => {
-
+                  //Add the like bool value to response (article info)
                   const payload = {article, isLiked}
                   res.status(200).json(payload);
 
@@ -134,15 +141,15 @@ exports.getArticleById = (req, res) => {
             });
         });
 };
-
+//Update article data
 exports.updateArticle = (req, res) => {
     const reqId = req.params.id;
     const content = req.body.content;
-
+    //If no request content send error
     if (!content) {
       res.status(400).send({message: "Content required"});
     };
-
+    //Else save new data in database
     Article.update(
         {content: content}, {
         where: { id: reqId }
@@ -152,6 +159,7 @@ exports.updateArticle = (req, res) => {
             message: "Article was updated successfully."
           });
         } else {
+          //Send error if no row modified
           res.status(500).send({
             message: `Cannot update article with id=${reqId}`
           });
@@ -162,7 +170,7 @@ exports.updateArticle = (req, res) => {
         });
     });
 };
-
+//Delete one article by ID
 exports.deleteArticle = (req, res) => {
     const data = JSON.parse(req.params.data);
     const articleId = data.element;
@@ -175,6 +183,7 @@ exports.deleteArticle = (req, res) => {
             message: "Article was deleted successfully."
           });
         } else {
+          //Send error if no row affected
           res.status(500).send({
             message: `Cannot delete article with id=${articleId}`
           });

@@ -7,7 +7,7 @@ const MIME_TYPES = {
   'image/gif': 'gif',
   'image/webp': 'webp',
 };
-
+//Check for image file only
 const imageFilter = (req, file, callback) => {
   if (file.mimetype.startsWith('image')) {
     callback(null, true);
@@ -15,7 +15,7 @@ const imageFilter = (req, file, callback) => {
     callback('Only images are accepted.', false);
   }
 };
-
+//Image location on server and naming process
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, 'images');

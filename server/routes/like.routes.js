@@ -9,8 +9,7 @@ module.exports = function(app) {
         );
         next();
     });
-    //Must be logged, option from unique article page or multiple article page
-    //[id, token, (params.id)]
+    //Like handling route
     app.put("/api/like/:id",
         [authJwt.verifyToken],
         controller.manageLikes

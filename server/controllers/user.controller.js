@@ -83,11 +83,27 @@ exports.updateUser = async (req, res) => {
         });
       });
     };
-    if (req.body.email)
-    userObject = {
-      ...userObject,
-      email: req.body.email
+    //If email is changed
+    if (req.body.email) {
+      User.update({ email: req.body.email }, { where: { id: userId } }).then(rows => {
+        if (rows == 1) {
+          res.status(200).send({
+            message: "User was updated successfully."
+          });
+        } else {
+          res.status(500).send({
+            message: `Cannot update user with id=${id}(image)`
+          });
+        };
+      //May be not needed (try/catch)
+      }).catch(err => {
+        res.status(500).send({
+          message: err.message || "Error updating user image"
+        });
+      });
     };
+    //beforeUpdate hook not triggering in models to change
+    //If password is changed check old password with user database info 
     if (req.body.password) {
       var passwordIsValid = bcrypt.compareSync(req.body.old_password, user.password);
       if (!passwordIsValid) {
@@ -96,14 +112,22 @@ exports.updateUser = async (req, res) => {
             message: "Invalid Password!"
         });
       };
-      userObject = {
-        ...userObject,
-        password: bcrypt.hashSync(req.body.password, 10)
-      };
     };
-    if (Object.keys(userObject).length !== 0) {
+    User.update({ password: req.body.password }, { where: { id: user.id }}).then(rows => {
+      if (rows == 1) {
+        res.status(200).send({
+          message: "User was updated successfully."
+        });
+      } else {
+        res.status(500).send({
+          message: `Cannot update user with id=${id}(data)`
+        });
+      };
+    });
+    //Update user if data were provided
+    /*if (Object.keys(userObject).length !== 0) {
       console.log("new user data:" + JSON.stringify(userObject))
-      User.update({ ...userObject }, { where: { id: userId } }).then(rows => {
+      User.update({ password: req.body.password }, { where: { id: user.id } }).then(rows => {
         if (rows == Object.keys(userObject).length) {
           res.status(200).send({
             message: "User was updated successfully."
@@ -119,9 +143,7 @@ exports.updateUser = async (req, res) => {
           message: err.message || "Error updating user data"
         });
       });
-    };
-    //Update user
-    
+    };*/
   } catch (err) {
     res.status(500).send({
       message: err.message || "Error updating user image"
@@ -167,6 +189,7 @@ exports.getUserByName = (req, res) => {
 exports.userDelete = (req, res) => {
   const data = JSON.parse(req.params.data);
   const targetId = data.element;
+  const defaultUrl = 'http://localhost:8080/images/default_user.png';
   console.log(targetId)
     
   User.findByPk(targetId).then(user => {
@@ -174,7 +197,15 @@ exports.userDelete = (req, res) => {
     if (user === null) {
       return res.status(404).send({message: "User not found!"});
     };
-
+    //if target user image url is not default delete image file
+    if (user.imageUrl !== defaultUrl) {
+      const filename = user.imageUrl.split('/images/')[1];
+      console.log("old filename:"+filename)
+      fs.unlink(`images/${filename}`, (err) => {
+        if (err) throw err;
+        console.log("deleted old image");
+      });
+    };
     User.destroy({where: { id: targetId }}).then(rows => {
       if (rows == 1) {
         return res.status(200).send({

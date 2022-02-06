@@ -5,6 +5,7 @@ import axios from "axios";
 import "../styles/profile.css"
 
 function Admin() {
+
   const { userState } = useContext(UserContext);
   const currentUser = userState;
   const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
@@ -13,20 +14,21 @@ function Admin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-
+    //Reset message on render
     setMessage("");
-
+    //Check for user token in session if not redirect to signin
     if (accessToken === null || !accessToken) { 
       window.location.replace("/signin")
     };
-
-    if (currentUser.isLogged) {
+    //Check context for displaying page info
+    if (currentUser.isLogged && currentUser.isAdmin) {
       axios.get(process.env.REACT_APP_BASE_URL + "/admin", { headers : { 'x-access-token': accessToken } })
-
         .then((res) => {
+          //If logged in Save user list in state to display
           setUserList(res.data);
 
         }).catch((error) => {
+          //Or save error message in state to display
           setMessage(error.response.data.message);
           console.log(error);
         });

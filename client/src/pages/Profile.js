@@ -18,46 +18,50 @@ function Profile() {
   const [refresh, setRefresh] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [privilege, setPrivilege] = useState(false);
-  
   const navigate = useNavigate();
   const location = useLocation();
   
   useEffect(() => {
-
+    //Reset message on render
     setMessage("");
-
+    //Check for user token in session if not redirect to signin
     if (accessToken === null || !accessToken) { 
       window.location.replace("/signin")
     };
-    
+    //Check if current user is owner of the targeted profile(context)
     if (name === user.username) {
       setIsOwner(true);
     };
+    //Check user privileges(context)
     if (user.isAdmin) {
       setPrivilege(true);
     };
-
+    //And again check context for displaying page info
     if (user.isLogged) {
       let URL = process.env.REACT_APP_BASE_URL + `/user/${name}`
 
-      console.log(isOwner, privilege)
+      //Retrieve target profile info
       axios.get(URL, { headers : { 'x-access-token': accessToken } })
         .then((res) => {
+          //Save it in state
           setCurrentProfile(res.data)
         }).catch((error) => {
+          //Or save error message in state to display
           setMessage(error.response.data.message);
           console.log(error);
         });
     } else {
+      //Redirect if not logged in context info
       navigate("/signin");
     };  
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[location, refresh]);
-
+  },[location, refresh]);//Trigger specified rerender
+  
+  //To clean up after a change and refresh component info
   function toggleRefresh() {
     setRefresh(!refresh);
   };
-  
+  //Props setting
   const data = {
     currentProfile: currentProfile,
     func: toggleRefresh,

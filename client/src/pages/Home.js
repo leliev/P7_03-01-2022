@@ -8,20 +8,19 @@ import "../styles/article.css"
 
 function Home() {
   
-  
   const { userState } = useContext(UserContext);
   const user = userState
   const [message, setMessage] = useState(null);
   const [articleList, setArticleList] = useState([]);
   const [refresh, setRefresh] = useState(false)
-  
   const navigate = useNavigate();
 
 
   useEffect(() => {
-    
+    //Check token if user is logged in
     const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
-    if (accessToken === null || !accessToken) { 
+    if (accessToken === null || !accessToken) {
+      //navigate to signin if not
       window.location.replace("/signin")
     };
     //Reset message on render
@@ -31,7 +30,7 @@ function Home() {
       navigate("/signin");
       //Else get article list
     } else if (user.isLogged) { 
-      axios.get(process.env.REACT_APP_BASE_URL + "/article", { headers : { 'x-access-token': accessToken } })
+      axios.get("http://localhost:8080/api/article", { headers : { 'x-access-token': accessToken } })
 
         .then((res) => {
           //If list empty set message state with server response and set list empty
@@ -48,8 +47,9 @@ function Home() {
         });
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[refresh]);
+  },[refresh]);//custom triggered
 
+  //To toggle refresh from child
   function toggleRefresh() {
     setRefresh(!refresh);
   };

@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { articleSchema } from "../../helpers/Schema/articleSchema";
 
 function Create(props) {
+
   const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
   const { userState } = useContext(UserContext);
   const user = userState;
@@ -12,18 +13,21 @@ function Create(props) {
   const [message, setMessage] = useState("an error occured plese wait");
   
   useEffect(() => {
+    //Reset message on render
     setMessage("");
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
-  
+
+  //From imported validation schema
   const validationSchema = articleSchema;
+  //Initial form value
   const initialValues = {
     title: "",
     content: ""
   };
 
   const onSubmit = (data) => {
-    
+    //Set data to send
     const payload = {
       ...data,
       id: user.id
@@ -32,16 +36,19 @@ function Create(props) {
     axios.post(process.env.REACT_APP_BASE_URL + "/article", payload, { headers : { 'x-access-token': accessToken } })
       .then((response) => {
         console.log(response.data.message);
+        //Close form and initiate refresh
         toggleForm()
         props.func(true);
       }).catch((error) => {
+        //Or set error message to display
         setMessage(error.response.data.message);
       });
   };
-  
+  //Manage form display
   function toggleForm() {
     setDisplayForm(!displayForm);
   };
+  
   return (
     <div>
       {message && (

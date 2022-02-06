@@ -13,28 +13,34 @@ function Signup() {
   let navigate = useNavigate();
 
   useEffect(() => {
+    //Check context if user logged or not
     const user = userState;
+    //Send user to home if logged
     if (user.isLogged) {
       navigate("/")
     };
-  });
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
+  //Initial form values
   const initialValues = {
     username: '',
     email: '',
     password: '',
     confirmation: '',
   };
+  //From imported validation schema
   const validationSchema = signupSchema;
-
+  
   const onSubmit = (data) => {
     axios.post(process.env.REACT_APP_BASE_URL + "/auth/signup", data)
       .then((res) => {
         console.log(res.data);
+        //If submit successful display response and info
         if (res.data) {
           setMessage(res.data.message);
           setIsSubmited(true);
         };
+      //If not display error message
       }).catch((error) => {
         setMessage(error.response.data.message);
         console.log(error.response);

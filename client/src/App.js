@@ -5,12 +5,10 @@ import axios from "axios";
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
 import Routes from "./components/Routes";
-import "./App.css";
-
-
+import "./styles/App.css";
 
 function App() {
-
+  //Set user context state
   const [userState, setUserState] = useState({
     id: 0,
     username: '',
@@ -23,12 +21,13 @@ function App() {
 
   useEffect(() => {
     const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
-    
-    if (accessToken !== null) {
+    //Check for token and logged state
+    if ((accessToken !== null) && !userState.isLogged) {
       console.log("setting context again")
-      
-      axios.get(`http://localhost:8080/api/auth`, { headers : { 'x-access-token': accessToken } })
+      //get user data 
+      axios.get(process.env.REACT_APP_BASE_URL + `/auth`, { headers : { 'x-access-token': accessToken } })
         .then((res) => {
+          //Save user data in context
           const privilege = res.data.roles.includes("ROLE_ADMIN")
           setUserState({
             id: res.data.id,
@@ -39,7 +38,7 @@ function App() {
             isLogged: true,
           });
         })
-      
+      //Or set context logged off
     }else if (accessToken === null || !accessToken) { 
       setUserState({
         ...userState,

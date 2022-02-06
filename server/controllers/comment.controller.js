@@ -2,15 +2,17 @@ const db = require("../models");
 const Comment = db.comment;
 const User = db.user;
 
+//Comment creation
 exports.createComment = (req, res) => {
     const userId = req.body.id ;
     const articleId = parseInt(req.params.id)
     const content = req.body.content;
 
+    //If no content send error
     if (!content) {
       res.status(400).send({message: "Content required"});
     };
-    
+    //Create the comment object with affiliated user id and article id
     User.findOne({
         where: { id: userId }
     }).then(user => {
@@ -20,7 +22,7 @@ exports.createComment = (req, res) => {
             userId: userId,
             articleId: articleId
         };
-
+        //Save data in database
         Comment.create({...comment})
             .then(() => {
                 res.status(200).send({message: "Comment created"});
@@ -31,10 +33,10 @@ exports.createComment = (req, res) => {
         res.status(500).send({message: err.message || "Error referencing current user"})
     });
 };
-
+//NOT IMPLEMENTED
 exports.getCommentById = (req, res) => {
     const reqId = req.params.id;
-
+    
     Comment.findByPk(reqId)
         .then(comment => {
           if (!comment) {
@@ -48,11 +50,15 @@ exports.getCommentById = (req, res) => {
             });
         });
 };
-
+//Updates comment data
 exports.updateComment = (req, res) => {
     const reqId = req.params.id;
     const content = req.body.content;
-
+    //If no content send error
+    if (!content) {
+      res.status(400).send({message: "Content required"});
+    };
+    //Update comment
     Comment.update(
         {content: content}, {
         where: {id: reqId}
@@ -62,6 +68,7 @@ exports.updateComment = (req, res) => {
             message: "Comment was updated successfully."
           });
         } else {
+          //If no raw affected send error
           res.status(500).send({
             message: `Cannot update comment with id=${reqId}`
           });
@@ -72,7 +79,7 @@ exports.updateComment = (req, res) => {
         });
     });
 }
-
+//Delete comment route
 exports.deleteComment = (req, res) => {
   const data = JSON.parse(req.params.data);
   const commentId = data.element;
@@ -86,6 +93,7 @@ exports.deleteComment = (req, res) => {
             message: "Comment was deleted successfully."
           });
         } else {
+          //If no raw affected send error
           res.status(500).send({
             message: `Cannot delete comment with id=${commentId}`
           });

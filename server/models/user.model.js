@@ -24,7 +24,6 @@ module.exports = (sequelize, Sequelize) => {
             validate: {
                 len: [6,18],
                 is: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$/i
-
             },
         },
         imageUrl: {
@@ -34,6 +33,7 @@ module.exports = (sequelize, Sequelize) => {
             }
         },
         {
+            //We encrypt the password before saving in database via the model
             hooks: {
                 beforeCreate: async (user) => {
                     if (user.password) {
@@ -41,10 +41,13 @@ module.exports = (sequelize, Sequelize) => {
                         user.password = await bcrypt.hash(user.password, salt);
                     }
                 },
-                beforeUpdate: async (user) => {
+                beforeBulkUpdate: async (user) => {
+                    console.log("before" + user)
                     if (user.password) {
+                        console.log("after" + user)
                         const salt = await bcrypt.genSalt(10);
-                        user.password = await bcrypt.hash(user.password, salt);
+                        user.password = await bcrypt.hash(user.previous.password, salt);
+                        console.log(user.password)
                     }
                 }
         }
