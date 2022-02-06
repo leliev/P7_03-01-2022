@@ -1,19 +1,33 @@
-<h1>Groupomania</h1>
+# Groupomania
+
 7th project of openclassroom web dev course
-<h2>--SETUP--</h2>
--First set up your database<br>
--Create .env file at server folder root and set it up as follow:<br>
-<ul>
-    <li>PORT=(server port)</li>
-    <li>CLIENT_PORT</li>
-    <li>DB_HOST</li>
-    <li>DB_USER</li>
-    <li>DB_PASS</li>
-    <li>DB=(DB name)</li>
-    <li>DB_DIALECT</li>
-    <li>TKEY=(token key)</li>
-    <li>URL_SERVER</li>
-    <li>URL_CLIENT</li>
-</ul>
--npm install in the server folder.<br>
--Comment the desired section in app.js file for dev(initial function for basic settings) or test 
+
+## DATABASE
+
+1. Connect to the mySQL server of your choice
+2. Create a new schema (for example : groupomania)
+3. Create a .env file in the root folder with the username and the password which you use to connect to your database, then modify the name of the database by the name of the schema that you have previously created.
+
+## SERVER
+
+1. Full list of required .env file
+- PORT=(server port)
+- CLIENT_PORT
+- DB_HOST
+- DB_USER
+- DB_PASS
+- DB=(DB name)
+- DB_DIALECT
+- TKEY=(token key)
+- URL_SERVER
+- URL_CLIENT
+2. npm install in the server folder.
+3. Comment the desired section in app.js file for dev(see db.init.js for basic settings and testing only!).
+3. Type npm start from the server folder in the terminal to start the server.
+
+## CLIENT
+
+1. npm install in the client folder.
+2. Create a .env.local file in the client root folder and type
+- REACT_APP_BASE_URL=(server port).
+3. Type npm start from the client folder in the terminal to start the react App.

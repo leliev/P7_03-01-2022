@@ -31,7 +31,7 @@ function Home() {
       navigate("/signin");
       //Else get article list
     } else if (user.isLogged) { 
-      axios.get("http://localhost:8080/api/article", { headers : { 'x-access-token': accessToken } })
+      axios.get(process.env.REACT_APP_BASE_URL + "/article", { headers : { 'x-access-token': accessToken } })
 
         .then((res) => {
           //If list empty set message state with server response and set list empty

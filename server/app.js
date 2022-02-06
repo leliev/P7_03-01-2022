@@ -11,23 +11,23 @@ var corsOptions = {
     origin: process.env.URL_CLIENT
   };
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //For test
-/*db.sequelize.sync().then(() => {
+db.sequelize.sync().then(() => {
   console.log("db connection success")
 }).catch((err) => {
   console.log(err.message)
-})*/
+})
 
 //For dev
-db.sequelize.sync({force: true}).then(() => {
+/*db.sequelize.sync({force: true}).then(() => {
   console.log('Drop and Resync Db');
   initial();
-});
+});*/
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 require('./routes/auth.routes')(app);

@@ -29,7 +29,7 @@ function Create(props) {
       id: user.id
     };
 
-    axios.post("http://localhost:8080/api/article", payload, { headers : { 'x-access-token': accessToken } })
+    axios.post(process.env.REACT_APP_BASE_URL + "/article", payload, { headers : { 'x-access-token': accessToken } })
       .then((response) => {
         console.log(response.data.message);
         toggleForm()

@@ -24,7 +24,7 @@ function App() {
   useEffect(() => {
     const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
     
-    if ((accessToken !== null) && !userState.isLogged) {
+    if (accessToken !== null) {
       console.log("setting context again")
       
       axios.get(`http://localhost:8080/api/auth`, { headers : { 'x-access-token': accessToken } })

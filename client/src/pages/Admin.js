@@ -21,7 +21,7 @@ function Admin() {
     };
 
     if (currentUser.isLogged) {
-      axios.get("http://localhost:8080/api/admin", { headers : { 'x-access-token': accessToken } })
+      axios.get(process.env.REACT_APP_BASE_URL + "/admin", { headers : { 'x-access-token': accessToken } })
 
         .then((res) => {
           setUserList(res.data);

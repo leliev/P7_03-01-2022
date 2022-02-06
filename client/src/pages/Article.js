@@ -30,7 +30,7 @@ function Article() {
       const payload = { "element": id, "user": user.id };
       const data = JSON.stringify(payload);
 
-      axios.get(`http://localhost:8080/api/article/${data}`, { headers : { 'x-access-token': accessToken } })
+      axios.get(process.env.REACT_APP_BASE_URL + `/article/${data}`, { headers : { 'x-access-token': accessToken } })
         .then((res) => {
           const likeValue = res.data.isLiked;
           setLiked(likeValue);
@@ -53,7 +53,7 @@ function Article() {
   }, [liked, refresh])
 
   function handleClick() {
-    axios.put(`http://localhost:8080/api/like/${article.id}`, likeData, { headers : { 'x-access-token': accessToken } })
+    axios.put(process.env.REACT_APP_BASE_URL + `/like/${article.id}`, likeData, { headers : { 'x-access-token': accessToken } })
       .then((response) => {
         console.log(response.data.message);
         setLiked(!liked)

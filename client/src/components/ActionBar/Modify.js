@@ -21,9 +21,9 @@ function Modify(data) {
   let URL = "";
 
   if (props.target === "article") {
-    URL = "http://localhost:8080/api/article/";
+    URL = process.env.REACT_APP_BASE_URL + "/article/";
   } else {
-    URL = "http://localhost:8080/api/comment/";
+    URL = process.env.REACT_APP_BASE_URL + "/comment/";
   };
 
   const onSubmit = (data) => {

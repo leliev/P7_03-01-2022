@@ -38,7 +38,7 @@ function Profile() {
     };
 
     if (user.isLogged) {
-      let URL = `http://localhost:8080/api/user/${name}`
+      let URL = process.env.REACT_APP_BASE_URL + `/user/${name}`
 
       console.log(isOwner, privilege)
       axios.get(URL, { headers : { 'x-access-token': accessToken } })

@@ -18,10 +18,10 @@ function ActionBar(props) {
   let target = "";
 
   if (element.like) {
-    URL = "http://localhost:8080/api/article/";
+    URL = process.env.REACT_APP_BASE_URL + "/article/";
     target = "article";
   } else {
-    URL = "http://localhost:8080/api/comment/";
+    URL = process.env.REACT_APP_BASE_URL + "/comment/";
     target = "comment";
   };
 

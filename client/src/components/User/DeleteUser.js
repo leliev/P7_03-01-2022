@@ -12,7 +12,7 @@ function DeleteUser(data) {
     const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
     const { userState } = useContext(UserContext);
     const user = userState;
-    const URL = "http://localhost:8080/api/user/"
+    const URL = process.env.REACT_APP_BASE_URL + "/user/"
     const [confirm, setConfirm] = useState(false);
     const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ function DeleteUser(data) {
         axios.delete(URL + data, { headers : { 'x-access-token': accessToken } })
           .then(() => {
               if (props.currentProfile.targetId === user.id) {
-                sessionStorage.removeItem("user");
+                sessionStorage.removeItem("accessToken");
                 navigate('/');
               } else {
                 navigate('/admin');

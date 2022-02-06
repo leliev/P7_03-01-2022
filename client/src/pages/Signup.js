@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../helpers/userContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -6,16 +7,16 @@ import { signupSchema } from "../helpers/Schema/signupSchema";
 import icon from "../images/icon.svg"
 
 function Signup() {
-
+  const {userState} = useContext(UserContext)
   const [isSubmited, setIsSubmited] = useState(false);
   const [message, setMessage] = useState(null);
   let navigate = useNavigate();
 
   useEffect(() => {
-    const user = JSON.parse(sessionStorage.getItem("user"));
-    if (user) {
+    const user = userState;
+    if (user.isLogged) {
       navigate("/")
-    }
+    };
   });
 
   const initialValues = {
@@ -27,7 +28,7 @@ function Signup() {
   const validationSchema = signupSchema;
 
   const onSubmit = (data) => {
-    axios.post("http://localhost:8080/api/auth/signup", data)
+    axios.post(process.env.REACT_APP_BASE_URL + "/auth/signup", data)
       .then((res) => {
         console.log(res.data);
         if (res.data) {
@@ -47,7 +48,7 @@ function Signup() {
       )}
 
       {isSubmited ? (
-        <p>Please Login to review content</p>
+        <p className="response">Please Login to review content</p>
       ):(
         <Formik
           initialValues={initialValues}

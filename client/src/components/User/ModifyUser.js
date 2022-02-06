@@ -76,7 +76,7 @@ function ModifyUser(data) {
         return prepData
       });
       console.log(prepData)
-      axios.put(`http://localhost:8080/api/user/${props.currentProfile.targetId}`, 
+      axios.put(process.env.REACT_APP_BASE_URL + `/user/${props.currentProfile.targetId}`, 
         prepData, { headers : { 'x-access-token': accessToken } 
       }).then((res) => {
         props.func();

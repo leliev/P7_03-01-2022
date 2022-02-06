@@ -19,7 +19,7 @@ function ModifyImage(data) {
     payload.append('id', user.id);
     payload.append('image', image);
 
-    axios.put(`http://localhost:8080/api/user/${props.currentProfile.targetId}`, payload, { headers : { 'x-access-token': accessToken } })
+    axios.put(process.env.REACT_APP_BASE_URL + `/user/${props.currentProfile.targetId}`, payload, { headers : { 'x-access-token': accessToken } })
       .then((res) => {
         props.func();
         toggleForm();

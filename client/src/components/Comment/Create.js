@@ -30,7 +30,7 @@ function Create(data) {
       id: user.id
     };
 
-    axios.post(`http://localhost:8080/api/comment/${props.element.id}`, payload, { headers : { 'x-access-token': accessToken } })
+    axios.post(process.env.REACT_APP_BASE_URL + `/comment/${props.element.id}`, payload, { headers : { 'x-access-token': accessToken } })
       .then((response) => {
         console.log(response.data.message);
         toggleForm();
