@@ -4,9 +4,7 @@ import Logo from '../images/icon-left-font-monochrome-black.svg';
 function Header() {
     return (
         <header>
-            <div>
-                <img src={Logo} alt="Logo Groupomania noir"/>
-            </div>
+            <img src={Logo} alt="Logo Groupomania noir"/>
         </header>
     );
 }

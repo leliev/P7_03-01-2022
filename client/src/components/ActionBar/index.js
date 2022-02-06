@@ -44,7 +44,7 @@ function ActionBar(props) {
   };
 
   return(
-    <div>
+    <div className="actionbar">
       {target === "article" ? (
         <>
           <Create data={data} />
@@ -56,7 +56,9 @@ function ActionBar(props) {
       {privilege || owner ? (
         <>
           <Modify data={data}/>
-          <button onClick={onClickDel}>delete</button>
+          <div>
+            <button onClick={onClickDel}className="popup_form_closebtn">delete</button>
+          </div>
         </>
       ) : (
         <></>

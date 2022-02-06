@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { signupSchema } from "../helpers/Schema/signupSchema";
+import icon from "../images/icon.svg"
 
 function Signup() {
 
@@ -42,7 +43,7 @@ function Signup() {
   return (
     <div>
       {message && (
-        <span>{message}</span>
+        <span className="error_response">{message}</span>
       )}
 
       {isSubmited ? (
@@ -53,44 +54,42 @@ function Signup() {
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
-          <Form className="sign_form">
+          <Form className="base_form">
             <h1>Créer un compte</h1>
-            <br />
-            <ErrorMessage name="username" component="span" />
-            <br />
+            <img src={icon} alt="Logo groupomania rouge simple"/>
             <label htmlFor="username">Name : </label>
             <Field
               aria-label="votre nom d'utilisateur"
               id="username"
               name="username"
-              placeholder="Votre nom d'utilisateur"
+              placeholder="User name"
               autoComplete="off"
             />
             <br />
-            <ErrorMessage name="email" component="span" />
+            <ErrorMessage name="username" component="span" className="form_error"/>
             <br />
             <label htmlFor="email">E-mail : </label>
             <Field
               aria-label="votre adresse email"
               id="email"
               name="email"
-              placeholder="Votre adresse email"
+              placeholder="E mail"
               autoComplete="off"
             />
             <br />
-            <ErrorMessage name="password" component="span" />
+            <ErrorMessage name="email" component="span" className="form_error"/>
             <br />
-            <label htmlFor="password">Mot de passe : </label>
+            <label htmlFor="password">Password : </label>
             <Field
               aria-label="votre mot de passe"
               id="password"
               type="password"
               name="password"
-              placeholder="Votre mot de passe"
+              placeholder="Password"
               autoComplete="off"
             />
             <br />
-            <ErrorMessage name="confirmation" component="span" />
+            <ErrorMessage name="password" component="span" className="form_error"/>
             <br />
             <label htmlFor="confirmation">Confirmation : </label>
             <Field
@@ -98,17 +97,19 @@ function Signup() {
               id="confirmation"
               type="password"
               name="confirmation"
-              placeholder="Confirmez votre mot de passe"
+              placeholder="Password confirm"
               autoComplete="off"
             />
             <br />
+            <ErrorMessage name="confirmation" component="span" className="form_error"/>
+            <br />
             <br />
             <button
-              className="sign_form_button"
+              className="base_form_button"
               type="submit"
               aria-label="valider"
             >
-              Valider
+              Sign Up
             </button>
           </Form>
         </Formik>

@@ -1,98 +1,18 @@
 .App {
   text-align: center;
-  width: 80%;
-  margin: auto;
 }
 
-button {
-  margin: 0 5px;
+.error_response{
+  color: rgb(122, 54, 54);
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-top: 50px;
 }
 
-.container {
-  width: 80%;
-  display: flex;
-  background-color: #282c34;
-  margin: auto;
-  justify-content: space-between;
-  align-items: center;
-}
-.container a {
-  background-color: aqua;
-  margin-right: 10px;
-}
-
-.article_form {
-  width: 60%;
-  margin: 5px auto;
-  padding: 5px;
-  border: 1px solid purple;
-}
-
-.articleCreator {
-  margin: 5px;
-}
-
-.articleCard {
-  border: 1px solid salmon;
-  margin: 5px;
-  padding: 5px;
-}
-
-.articleFooter {
-  display: flex;
-  background-color: beige;
-  justify-content: space-between;
-  margin-bottom: 5px;
-}
-
-.commentCard {
-  width: 60%;
-  margin: 5px auto;
-  padding: 5px;
-  border: 1px solid blueviolet;
-}
-
-.commentFooter {
-  background-color: beige;
-  justify-content: space-between;
-}
-
-.modifyWrapper {
-  margin-top: 5px;
-}
-
-.userWrapper {
-  display: flex;
-  flex-wrap: wrap;
-}
-.profileCard{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.userCard {
-  border: 1px solid black;
-  cursor: pointer;
-  width: 40%;
-  margin: 5px;
-}
-.imageCard {
-  border: 1px solid black;
-  margin: 5px;
-  width: 40%;
-}
-.imageCard img {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-}
 header img {
-  width: 55%;
-  min-width: 130px
+  width: 40%;
+  min-width: 250px
 }
 
-.profileFooter {
-  border: 1px solid blue;
-}
 
 

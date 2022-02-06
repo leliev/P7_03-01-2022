@@ -8,7 +8,7 @@ function ModifyImage(data) {
   const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
   const { userState } = useContext(UserContext);
   const user = userState;
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState();
   const [displayForm, setDisplayForm] = useState(false);
 
   const handleUpload = (event) => {
@@ -30,6 +30,7 @@ function ModifyImage(data) {
 
   function toggleForm() {
     setDisplayForm(!displayForm);
+    setImage();
   };
 
   return (
@@ -38,8 +39,15 @@ function ModifyImage(data) {
       <>
         {displayForm ? (
           <>
-            <button onClick={toggleForm}>Close</button>
-            <form onSubmit={handleUpload} className="upload">
+            <button onClick={toggleForm} className="base_form_closebtn">Close</button>
+            <form onSubmit={handleUpload} className="popup_form">
+              <button onClick={toggleForm} className="base_form_closebtn">Close</button>
+              {image && (
+                <div>
+                  <img src={image? URL.createObjectURL(image) : null} alt={image? image.name : null} id="profile_preview"/>
+                </div>
+              )}
+              
               <input
                 type="file"
                 id="image"
@@ -48,13 +56,14 @@ function ModifyImage(data) {
                 onChange={(event) => setImage(event.target.files[0])}
                 aria-label="modifier votre image"
               />
-              <button type="submit" aria-label="valider">
+              <label htmlFor="image">Choose a file</label>
+              <button type="submit" aria-label="valider" className="base_form_button">
                 Update
               </button>
             </form>
           </>
         ) : (
-          <button onClick={toggleForm}>Update image</button>
+          <button onClick={toggleForm} className="base_form_button">Update image</button>
         )}
       </>
     )}

@@ -9,7 +9,7 @@ function Create(props) {
   const { userState } = useContext(UserContext);
   const user = userState;
   const [displayForm, setDisplayForm] = useState(false);
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState("an error occured plese wait");
   
   useEffect(() => {
     setMessage("");
@@ -45,23 +45,21 @@ function Create(props) {
   return (
     <div>
       {message && (
-        <span>{message}</span>
+        <span className="error_response">{message}</span>
       )}
       {displayForm ? (
         <div className="articleCreator">
-          <button onClick={toggleForm}>
-            Close form
-          </button>
+          
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >
-            <Form className="article_form">
+            <Form id="article_create" className="base_form">
+              <button onClick={toggleForm} className="base_form_closebtn">
+                Close form
+              </button>
               <h3>Share your story</h3>
-              <br />
-              <ErrorMessage name="title" component="span" />
-              <br />
               <label htmlFor="title">Title : </label>
               <br/>
               <Field
@@ -72,7 +70,7 @@ function Create(props) {
                 autoComplete="off"
               />
               <br />
-              <ErrorMessage name="content" component="span" />
+              <ErrorMessage name="title" component="span" className="form_error"/>
               <br />
               <label htmlFor="content">Content : </label>
               <br />
@@ -85,9 +83,10 @@ function Create(props) {
                 autoComplete="off"
               />
               <br />
+              <ErrorMessage name="content" component="span" className="form_error"/>
               <br />
               <button
-                className="article_form_button"
+                className="base_form_button"
                 type="submit"
                 aria-label="valider"
               >
@@ -98,7 +97,7 @@ function Create(props) {
         </div> 
       ) : (
         <div className="articleCreator">
-          <button onClick={toggleForm}>
+          <button onClick={toggleForm} className="base_form_button">
             Share your Story
           </button>
         </div>

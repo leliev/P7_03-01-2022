@@ -77,10 +77,11 @@ function Article() {
       <div className="articleCard">
 
         {message && (
-          <span>{message}</span>
+          <span className="error_response">{message}</span>
         )}
 
         <div className="articleBody">
+        <button id="like" onClick={handleClick} className={liked ? "base_form_closebtn" : "base_form_button"} >{liked ? "Unlike" : "Like"}</button>
           <h2>{article.title}</h2>
           <p>
             {article.content}
@@ -88,10 +89,6 @@ function Article() {
         </div>
 
         <div className="articleFooter">
-
-          <div>
-            <button onClick={handleClick}>{liked ? "Unlike" : "Like"}</button>
-          </div>
 
           <span>Likes : {article.like ? article.like.value : 0}</span>
     
@@ -123,12 +120,12 @@ function Article() {
           };
           return (
             <div className="commentCard" key={key}>
-              <p>
-                {comment.content}
-              </p>
+              <div className="commentBody">
+                <p>{comment.content}</p>
+              </div>
 
               <div className="commentFooter">
-                <span>Author : {comment.author}</span>
+                <span>Comment by : {comment.author}</span>
               </div>
               
               <div>

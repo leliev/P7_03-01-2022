@@ -4,17 +4,20 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { signinSchema } from "../helpers/Schema/signinSchema";
+import "../styles/base_form.css"
+import icon from "../images/icon.svg"
 
 function Signin() {
+  
   const {userState} = useContext(UserContext)
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState();
   let navigate = useNavigate();
   
   useEffect(() => {
     const user = userState;
     if (user.isLogged) {
       navigate("/")
-    }
+    };
   });
 
   const initialValues = {
@@ -28,10 +31,6 @@ function Signin() {
       .then((res) => {
         
         if (res.data) {
-          /*const user = {
-            id: res.data.id,
-            accessToken: res.data.accessToken
-          };*/
           sessionStorage.setItem("accessToken", JSON.stringify(res.data.accessToken));
           console.log("session:" + res.data.accessToken)
           window.location.replace('/');
@@ -43,53 +42,52 @@ function Signin() {
   };
   
   return (
-    <div>
+    <>
       {message && (
-        <span>{message}</span>
+        <span className="error_response">{message}</span>
       )}
-
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        <Form className="sign_form">
-          <h1>Registration</h1>
-          <br />
-          <ErrorMessage name="username" component="span" />
-          <br />
+        <Form className="base_form">
+          <h1>Sign In</h1>
+          <img src={icon} alt="Logo groupomania rouge simple"/>
           <label htmlFor="username">Name : </label>
           <Field
             aria-label="votre nom d'utilisateur"
             id="username"
             name="username"
-            placeholder="Votre nom d'utilisateur"
+            placeholder="User name"
             autoComplete="off"
           />
           <br />
-          <ErrorMessage name="password" component="span" />
+          <ErrorMessage name="username" component="span" className="form_error"/>
           <br />
-          <label htmlFor="password">password : </label>
+          <label htmlFor="password">Password : </label>
           <Field
             aria-label="votre mot de passe"
             id="password"
             type="password"
             name="password"
-            placeholder="Votre mot de passe"
+            placeholder="Password"
             autoComplete="off"
           />
           <br />
+          <ErrorMessage name="password" component="span" className="form_error"/>
+          <br />
           <br />
           <button
-            className="sign_form_button"
+            className="base_form_button"
             type="submit"
             aria-label="valider"
           >
-            Log In
+            Sign In
           </button>
         </Form>
       </Formik>
-    </div>
+    </>
   )
 }
 

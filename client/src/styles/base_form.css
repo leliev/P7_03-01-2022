@@ -1,0 +1,178 @@
+.base_form {
+    width: 50%;
+    border: 1px solid #282c34;
+    border-radius: 10px;
+    background-color: #fff;
+    margin: 50px auto;
+    box-shadow: 5px 5px 5px 2px rgba(0, 0, 0, 0.5);
+}
+
+.base_form h1 {
+    background-color: #282c34;
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding: 5px;
+    border-radius: 8px 8px 0 0;
+}
+
+.base_form img {
+    width: 40%;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    
+}
+
+.base_form label {
+    display: block;
+    font-size: 1.5em;
+    background-color: #282c34;
+    color: #fff;
+    margin: 5px auto 5px auto;
+    width: 50%;
+}
+
+.base_form input {
+    width: 40%;
+    font-size: 1.2em;
+
+}
+
+.base_form textarea {
+    width:80%;
+    height: 150px;
+    font-size: 1.2em;
+}
+
+.base_form_button {
+    border: 1px solid #364f8c;
+    background-color: #364f8c;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1.5em;
+    padding: 0 5px;
+    margin: 5px 0;
+    color: #fff;
+    cursor: pointer;
+}
+
+.base_form_button:hover {
+    background-color: #fff;
+    color: #364f8c;
+}
+
+.base_form_closebtn {
+    background-color: rgb(180, 20, 20);
+    border: 1px solid rgb(180, 20, 20);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1.5em;
+    padding: 0 5px;
+    margin: 5px 0;
+    color: #fff;
+    cursor: pointer;
+}
+
+.base_form_closebtn:hover {
+    background-color: #fff;
+    color: rgb(180, 20, 20);
+}
+
+.form_error {
+    font-size: 1.2em;
+    color: rgb(122, 54, 54);
+    font-weight: 600;
+}
+
+.popup_form {
+    width: 50%;
+    border: 1px solid #282c34;
+    border-radius: 10px;
+    background-color: rgb(228, 228, 228);
+    margin: 50px auto;
+    box-shadow: 5px 5px 5px 2px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.popup_form h1 {
+    background-color: #282c34;
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding: 5px;
+    border-radius: 8px 8px 0 0;
+}
+
+.popup_form img {
+    width: 40%;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    
+}
+
+.popup_form label {
+    display: block;
+    font-size: 1.5em;
+    background-color: #282c34;
+    color: #fff;
+    margin: 5px auto 5px auto;
+    width: 50%;
+}
+
+.popup_form input {
+    width: 40%;
+    font-size: 1.2em;
+
+}
+
+.popup_form textarea {
+    width:80%;
+    height: 150px;
+    font-size: 1.2em;
+}
+
+.popup_form_button {
+    border: 1px solid #364f8c;
+    background-color: #364f8c;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1.5em;
+    padding: 0 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.popup_form_button:hover {
+    background-color: #fff;
+    color: #364f8c;
+}
+
+.popup_form_closebtn {
+    background-color: rgb(180, 20, 20);
+    border: 1px solid rgb(180, 20, 20);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1.5em;
+    padding: 0 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.popup_form_closebtn:hover {
+    background-color: #fff;
+    color: rgb(180, 20, 20);
+}
+
+@media screen and (max-width: 650px) {
+    .base_form {
+        width: 80%;
+    }
+
+    .popup_form {
+        width: 80%;
+        top: 25%;
+    }
+}

@@ -49,13 +49,13 @@ function Modify(data) {
   };
   
   return (
-    <div>
+    <>
       {message && (
-        <span>{message}</span>
+        <span className="error_response">{message}</span>
       )}
       {displayForm ? (
-        <div  className="modifyWrapper">
-          <button className="modify" onClick={toggleForm}>
+        <>
+          <button className="popup_form_closebtn" onClick={toggleForm}>
             Close form
           </button>
           <Formik
@@ -63,13 +63,12 @@ function Modify(data) {
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >
-            <Form className="article_form">
+            <Form className="popup_form">
+              <button className="base_form_closebtn" onClick={toggleForm}>
+                Close form
+              </button>
               <h3>Modify your story</h3>
-              <br />
-              <ErrorMessage name="content" component="span" />
-              <br />
               <label htmlFor="content">Content : </label>
-              <br />
               <Field
                 as="textarea"
                 aria-label="votre histoire"
@@ -79,9 +78,11 @@ function Modify(data) {
                 autoComplete="off"
               />
               <br />
+              <ErrorMessage name="content" component="span" className="form_error"/>
+              <br />
               <br />
               <button
-                className="article_form_button"
+                className="base_form_button"
                 type="submit"
                 aria-label="valider"
               >
@@ -89,16 +90,16 @@ function Modify(data) {
               </button>
             </Form>
           </Formik>
-        </div> 
+        </> 
       ) : (
         <>
-          <button className="modify" onClick={toggleForm}>
+          <button className="popup_form_button" onClick={toggleForm} >
             Modify
           </button>
         </>
       )}
       
-    </div>
+    </>
   )
 }
 

@@ -1,0 +1,43 @@
+nav {
+    display: flex;
+    background-color: #282c34;
+    margin: auto;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #282c34;
+}
+.active{
+    background-color: white;
+    color: #282c34;
+    font-weight: 600;
+}
+nav a {
+    font-size: 1.5em;
+    text-decoration: none;
+    color: white;
+    flex: 1;
+    border-right: 1px solid #282c34;
+}
+
+nav a:hover {
+    background-color: white;
+    color: #282c34;
+    font-weight: 600;
+}
+
+nav button {
+    background-color: rgb(180, 20, 20);
+    font-family: inherit;
+    font-size: 1.5em;
+    border: none;
+    padding: 0 5px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+nav button:hover {
+    background-color: #fff;
+    color: rgb(180, 20, 20);
+    font-weight: 600;
+}

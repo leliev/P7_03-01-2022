@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs")
 module.exports = (sequelize, Sequelize) => {
     const User = sequelize.define("users", {
         username: {
@@ -5,8 +6,8 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,
             unique: true,
             validate: {
-                isAlphanumeric: true,
-                len: [2, 10]
+                //isAlphanumeric: true,
+                len: [3, 15]
             }
         },
         email: {
@@ -21,14 +22,32 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false,
             validate: {
-                min: 8
-            }
+                len: [6,18],
+                is: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$/i
+
+            },
         },
         imageUrl: {
             type: Sequelize.STRING,
             allowNull: false,
             defaultValue: 'http://localhost:8080/images/default_user.png',
             }
+        },
+        {
+            hooks: {
+                beforeCreate: async (user) => {
+                    if (user.password) {
+                        const salt = await bcrypt.genSalt(10);
+                        user.password = await bcrypt.hash(user.password, salt);
+                    }
+                },
+                beforeUpdate: async (user) => {
+                    if (user.password) {
+                        const salt = await bcrypt.genSalt(10);
+                        user.password = await bcrypt.hash(user.password, salt);
+                    }
+                }
+        }
     });
     return User;
 };

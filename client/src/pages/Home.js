@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Create from "../components/Article/Create";
 import ActionBar from "../components/ActionBar";
+import "../styles/article.css"
 
 function Home() {
   
@@ -54,53 +55,53 @@ function Home() {
   };
 
   return (
-    <div className="articleWrapper">
+    <div>
       {message && (
-        <span>{message}</span>
+        <span className="error_response">{message}</span>
       )}
       <Create func={toggleRefresh}/>
       {articleList && (
-        <>
-        {articleList.map((article, key) => {
+        <div className="articleWrapper">
+          {articleList.map((article, key) => {
 
-          var data = {
-            element: article,
-            func: toggleRefresh
-          };
-          return (
-            <div className="articleCard" key={key}>
+            var data = {
+              element: article,
+              func: toggleRefresh
+            };
+            return (
+              <div className="articleCard" key={key}>
 
-              <div className="articleBody"  onClick={() => {
-                navigate(`/article/${article.id}`)
-              }}>
-                <h2>{article.title}</h2>
-                <p>
-                  {article.content}
-                </p>
+                <div className="articleBody"  onClick={() => {
+                  navigate(`/article/${article.id}`)
+                }}>
+                  <h2>{article.title}</h2>
+                  <p>
+                    {article.content}
+                  </p>
+                </div>
+
+                <div className="articleFooter">
+                  <span>Likes : {article.like.value}</span>
+
+                  {article.userId ? (
+                    <span onClick={() => {
+                      navigate(`/user/${article.author}`)
+                    }}>
+                      Author : {article.author}
+                    </span>
+                  ) : (
+                    <span>
+                      Author (deleted): {article.author}
+                    </span>
+                  )}
+
+                  <span>Comments : {article.commentCount}</span>
+                </div>
+                <ActionBar data={data} />
               </div>
-
-              <div className="articleFooter">
-                <span>Likes : {article.like.value}</span>
-
-                {article.userId ? (
-                  <span onClick={() => {
-                    navigate(`/user/${article.author}`)
-                  }}>
-                    Author : {article.author}
-                  </span>
-                ) : (
-                  <span>
-                    Author (deleted): {article.author}
-                  </span>
-                )}
-
-                <span>Comments : {article.commentCount}</span>
-              </div>
-              <ActionBar data={data} />
-            </div>
-          );
-        })}
-        </>
+            );
+          })}
+        </div>
       )}
     </div>
   )

@@ -94,19 +94,20 @@ function ModifyUser(data) {
 
   return (
     <>
-      {displayForm ? (
+      <button onClick={toggleForm} className={displayForm ? "base_form_closebtn" : "base_form_button"}>
+        {displayForm ? "Close" : "Update user"}
+      </button>
+      {displayForm && (
         <>
-          <button onClick={toggleForm}>Update user</button>
           <Formik
             initialValues={initialValues}
             validationSchema={formSchema}
             onSubmit={handleFormSubmit}
           >
           {({ isValid, isSubmitting, touched, errors }) => (
-            <Form>
-              <br />
-              <ErrorMessage name="email" component="span" />
-              <br />
+            <Form className="popup_form">
+              <button onClick={toggleForm} className="base_form_closebtn">Close</button>
+              <h3>Modify your info</h3>
               <label htmlFor="email">E-mail : </label>
               <Field
                 aria-label="votre adresse email"
@@ -116,7 +117,7 @@ function ModifyUser(data) {
                 autoComplete="off"
               />
               <br />
-              <ErrorMessage name="old_password" component="span" />
+              <ErrorMessage name="email" component="span" className="form_error"/>
               <br />
               <label htmlFor="old_password">Old Password : </label>
               <Field
@@ -128,7 +129,7 @@ function ModifyUser(data) {
                 autoComplete="off"
               />
               <br />
-              <ErrorMessage name="password" component="span" />
+              <ErrorMessage name="old_password" component="span" className="form_error"/>
               <br />
               <label htmlFor="password">New password : </label>
               <Field
@@ -140,7 +141,8 @@ function ModifyUser(data) {
                 autoComplete="off"
               />
               <br />
-              <ErrorMessage name="password_confirmation" component="span" />
+              <ErrorMessage name="password" component="span" className="form_error"/>
+              
               <br />
               <label htmlFor="password_confirmation">Confirmation : </label>
               <Field
@@ -151,8 +153,11 @@ function ModifyUser(data) {
                 placeholder="Confirmation"
                 autoComplete="off"
               />
+              <br />
+              <ErrorMessage name="password_confirmation" component="span" className="form_error"/>
               <br/>
               <button
+                className="base_form_button"
                 disabled={!isValid || isSubmitting}
                 type="submit"
               >
@@ -162,8 +167,6 @@ function ModifyUser(data) {
           )}
           </Formik>
         </>
-      ) : (
-        <button onClick={toggleForm}>Update user</button>
       )}
     </>
   );

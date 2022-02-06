@@ -53,8 +53,8 @@ function DeleteUser(data) {
 
   return (
     <>
-      <button onClick={toggleConfirm}>
-        Delete profile
+      <button onClick={toggleConfirm} className="base_form_closebtn">
+        {confirm ? ("Close") : ("Delete profile")} 
       </button>
       {confirm && (
         <Formik
@@ -62,12 +62,11 @@ function DeleteUser(data) {
           validationSchema={confirmSchema}
           onSubmit={onClickDel}
         >
-          <Form>
-            <br />
-            <ErrorMessage name="confirm" component="span" />
-            <br />
+          <Form className="popup_form">
+            <button onClick={toggleConfirm}className="base_form_closebtn">
+              Close
+            </button>
             <label htmlFor="confirm">Enter "confirm" to delete </label>
-            <br/>
             <Field
               aria-label="confirmation"
               id="confirm"
@@ -75,8 +74,10 @@ function DeleteUser(data) {
               placeholder="confirm"
               autoComplete="off"
             />
+            <br />
+            <ErrorMessage name="confirm" component="span" className="form_error"/>
             <br/>
-            <button type="submit">
+            <button type="submit" className="base_form_closebtn">
               Delete
             </button>
           </Form>

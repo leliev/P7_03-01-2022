@@ -1,0 +1,9 @@
+body {
+    min-width: 500px;
+    margin: 0;
+    background-color: rgb(195, 205, 216);
+}
+
+#root {
+    margin: 5px;
+}

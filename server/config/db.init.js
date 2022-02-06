@@ -17,7 +17,7 @@ module.exports = function initial() {
     User.create({
       username: "admin",
       email: "admin@admin.com",
-      password: bcrypt.hashSync("azertyui", 10)
+      password:"Azert0"
     }).then(user => {
       user.setRoles([1,2]).then(() => {
           console.log("Admin registered successfully!");
@@ -28,7 +28,7 @@ module.exports = function initial() {
     User.create({
       username: "zouz",
       email: "zouz@zouz.com",
-      password: bcrypt.hashSync("12345678", 10)
+      password: "1234aA"
     }).then(user => {
       user.setRoles(1).then(() => {
           console.log("User registered successfully!");

@@ -5,6 +5,7 @@ import { useParams, useNavigate, useLocation} from 'react-router-dom';
 import ModifyImage from "../components/User/ModifyImage"
 import ModifyUser from "../components/User/ModifyUser";
 import DeleteUser from "../components/User/DeleteUser";
+import "../styles/profile.css"
 
 function Profile() {
 
@@ -67,36 +68,36 @@ function Profile() {
   return (
     <>
       {message && (
-        <span>{message}</span>
+        <span className="error_response">{message}</span>
       )}
       <h1>Profile page</h1>
-      <div className="profileCard">
-        <div className="imageCard">
+      <div className="profileWrapper">
+        <div className="profileCard">
           <img src={currentProfile.imageUrl} alt="user profile"/>
-        </div>
-        <div className="userCard">
-          <div className="userBody">
-            <h2>{currentProfile.username}</h2>
-            <span>Email : {currentProfile.email}</span>
+          <div className="userCard">
+            <div className="userBody">
+              <h2>{currentProfile.username}</h2>
+              <span><b>Email</b> : {currentProfile.email}</span>
+            </div>
+            <div className="userFooter">
+              <span><b>Articles</b> : {currentProfile.Article}</span>
+              <span><b>Comments</b> : {currentProfile.Comment}</span>
+            </div>
           </div>
-          <div className="userFooter">
-            <span>Articles : {currentProfile.Article}</span>
-            <span>Comments : {currentProfile.Comment}</span>
-          </div>
         </div>
-      </div>
-      <div className="profileFooter">
-        {(privilege || isOwner) && (
-          <>
-            <DeleteUser data={data}/>
-          </>
-        )}
-        {isOwner && (
-          <>
-            <ModifyImage data={data}/>
-            <ModifyUser data={data}/>
-          </>   
-        )}
+        <div className="profileFooter">
+          {(privilege || isOwner) && (
+            <>
+              <DeleteUser data={data}/>
+            </>
+          )}
+          {isOwner && (
+            <>
+              <ModifyImage data={data}/>
+              <ModifyUser data={data}/>
+            </>   
+          )}
+        </div>
       </div>
     </>
   );

@@ -1,20 +1,28 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../helpers/userContext";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import "../styles/Navbar.css"
 
 
 function Navbar() {
 
     const { userState } = useContext(UserContext);
     const user = userState;
+    const location = useLocation();
+    const [active, setActive] = useState("")
     let privilege = null;
-
+    let activePath = toString(location.pathname.split("/")[1]);
     if (!user.isLogged) {
         privilege = false;
     } else {
         privilege = user.isAdmin;
     };
-    
+    useEffect(() => {
+        //activePath = toString(location.pathname.split("/")[1]);
+        setActive(activePath)
+        console.log(active)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[location])
     const logout = () => {
         sessionStorage.removeItem("accessToken");
         window.location.replace('/');
@@ -24,27 +32,27 @@ function Navbar() {
         <nav className="container">
             {userState.isLogged ? (
             <>
-                <NavLink to={'/'} aria-label="page des articles">
+                <NavLink to={'/'} className={!active  && "active"} aria-label="page des articles">
                     Articles
                 </NavLink>
-                <NavLink to={`/user/${user.username}`} aria-label="page de profile">
+                <NavLink to={`/user/${user.username}`} className={(active === "user") && "active"} aria-label="page de profile">
                     Profile
                 </NavLink>
                 {privilege && (
-                    <NavLink to={'/admin'} aria-label="page administrateur">
+                    <NavLink to={'/admin'} className={(active === "admin") && "active"} aria-label="page administrateur">
                         Admin
                     </NavLink>
                 )}
                 <button aria-label="Déconnexion" onClick={logout}>
-                    logout
+                    Logout
                 </button>
             </>
             ) : (
             <>
-                <NavLink to={'/signin'} aria-label="page de connexion">
+                <NavLink to={'/signin'} className={(active === "signin") && "active"} aria-label="page de connexion">
                     Login
                 </NavLink>
-                <NavLink to={'/signup'} aria-label="page d'inscription">
+                <NavLink to={'/signup'} className={(active === "signup") && "active"} aria-label="page d'inscription">
                     Signup
                 </NavLink>
             </>

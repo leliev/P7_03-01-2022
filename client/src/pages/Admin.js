@@ -2,6 +2,7 @@ import React, {useEffect, useState, useContext} from "react";
 import { UserContext } from "../helpers/userContext"
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../styles/profile.css"
 
 function Admin() {
   const { userState } = useContext(UserContext);
@@ -37,23 +38,25 @@ function Admin() {
   return (
     <div>
       {message && (
-        <span>{message}</span>
+        <span className="error_response">{message}</span>
       )}
       <h1>Admin page</h1>
       <div className="userWrapper">
         {userList.map((user, key) => {
           return (
-            <div className="userCard" key={key} onClick={() => {navigate(`/user/${user.username}`)}}>
-              <div className="imageCard">
+            <div className="profileThumb">
+              <div className="profileCard">
                 <img src={user.imageUrl} alt="user profile"/>
-              </div>
-              <div className="userBody">
-                <h3>{user.username}</h3>
-                <span>Email : {user.email}</span>
-              </div>
-              <div className="userFooter">
-                <span>Articles : {user.articleCount}</span>
-                <span>Comments : {user.commentCount}</span>
+                <div className="userCard" key={key} onClick={() => {navigate(`/user/${user.username}`)}}>
+                  <div className="userBody">
+                    <h2>{user.username}</h2>
+                    <span><b>Email</b> : {user.email}</span>
+                  </div>
+                  <div className="userFooter">
+                    <span><b>Articles</b> : {user.articleCount}</span>
+                    <span><b>Comments</b> : {user.commentCount}</span>
+                  </div>
+                </div>
               </div>
             </div>
           );
