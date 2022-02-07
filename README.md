@@ -10,7 +10,7 @@
 
 ## SERVER
 
-1. Full list of required .env file
+1. Full list of required .env file properties
 - PORT=(server port)
 - CLIENT_PORT
 - DB_HOST
