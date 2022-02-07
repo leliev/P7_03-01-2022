@@ -21,10 +21,12 @@ module.exports = (sequelize, Sequelize) => {
         password: {
             type: Sequelize.STRING,
             allowNull: false,
-            validate: {
-                len: [6,18],
-                is: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$/i
-            },
+            set(value) {
+                console.log(value)
+                const hash = bcrypt.hashSync(value, 10);
+                console
+                this.setDataValue('password', hash)
+            }
         },
         imageUrl: {
             type: Sequelize.STRING,
@@ -32,7 +34,7 @@ module.exports = (sequelize, Sequelize) => {
             defaultValue: 'http://localhost:8080/images/default_user.png',
             }
         },
-        {
+        /*{
             //We encrypt the password before saving in database via the model
             hooks: {
                 beforeCreate: async (user) => {
@@ -50,7 +52,7 @@ module.exports = (sequelize, Sequelize) => {
                         console.log(user.password)
                     }
                 }
-        }
-    });
+        }}*/
+    );
     return User;
 };

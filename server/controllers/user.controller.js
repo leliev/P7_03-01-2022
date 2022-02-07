@@ -43,7 +43,7 @@ exports.adminBoard = (req, res) => {
 
 //Updates user with user input
 exports.updateUser = async (req, res) => {
-  
+  const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$/;
   try {
     const userId = parseInt(req.params.id);
     const defaultUrl = 'http://localhost:8080/images/default_user.png';
@@ -85,26 +85,34 @@ exports.updateUser = async (req, res) => {
     };
     //If email is changed
     if (req.body.email) {
-      User.update({ email: req.body.email }, { where: { id: userId } }).then(rows => {
-        if (rows == 1) {
-          res.status(200).send({
-            message: "User was updated successfully."
-          });
-        } else {
-          res.status(500).send({
-            message: `Cannot update user with id=${id}(image)`
-          });
-        };
-      //May be not needed (try/catch)
-      }).catch(err => {
-        res.status(500).send({
-          message: err.message || "Error updating user image"
-        });
-      });
+      userObject = {
+        ...userObject,
+        email: req.body.email
+      }
     };
+    if (req.body.password) {
+      var passwordIsValid = bcrypt.compareSync(req.body.old_password, user.password);
+      if (!passwordIsValid) {
+        return res.status(401).json({
+            accessToken: null,
+            message: "Invalid Password!"
+        });
+      };
+      if (!regex.test(req.body.password)) {
+        return res.status(400).json({
+            message:
+              'Password must be 6 - 18 characters long, at least one uppercase, one lowercase and one digit',
+          });
+      }else {
+        userObject = {
+          ...userObject,
+          password: req.body.password
+        }
+      }
+    }
     //beforeUpdate hook not triggering in models to change
     //If password is changed check old password with user database info 
-    if (req.body.password) {
+    /*if (req.body.password) {
       var passwordIsValid = bcrypt.compareSync(req.body.old_password, user.password);
       if (!passwordIsValid) {
         return res.status(401).json({
@@ -123,27 +131,18 @@ exports.updateUser = async (req, res) => {
           message: `Cannot update user with id=${id}(data)`
         });
       };
-    });
+    });*/
     //Update user if data were provided
-    /*if (Object.keys(userObject).length !== 0) {
-      console.log("new user data:" + JSON.stringify(userObject))
-      User.update({ password: req.body.password }, { where: { id: user.id } }).then(rows => {
-        if (rows == Object.keys(userObject).length) {
+    if (Object.keys(userObject).length !== 0) {
+      console.log("new user data:" + Object.keys(userObject).length)
+      User.update({ ...userObject }, { where: { id: user.id } }).then(rows => {
+        if (rows !== 0) {
           res.status(200).send({
             message: "User was updated successfully."
           });
-        } else {
-          res.status(500).send({
-            message: `Cannot update user with id=${id}(data)`
-          });
         };
-      //May be not needed (try/catch)
-      }).catch(err => {
-        res.status(500).send({
-          message: err.message || "Error updating user data"
-        });
-      });
-    };*/
+      })
+    };
   } catch (err) {
     res.status(500).send({
       message: err.message || "Error updating user image"

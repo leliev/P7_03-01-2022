@@ -6,19 +6,21 @@ const Op = db.Sequelize.Op;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$/;
 
 //Signup route
 exports.signup = (req, res) => {
     console.log(req.body)
-    const user = {
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password
-    }
-    //If missing credentials send error
-    if (!user.username || !user.email || !user.password) {
-        res.status(400).json({message: "Missing information"})
+    const { username, email, password } = req.body;
+    if (username == null || email == null || password == null) {
+        return res.status(400).json({ message: 'Missing parameters' });
     };
+    if (!regex.test(password)) {
+        return res.status(400).json({
+            message:
+              'Password must be 6 - 18 characters long, at least one uppercase, one lowercase and one digit',
+          });
+    }
     //Save into database
     User.create({ ...user })
       .then(user => {
@@ -26,7 +28,7 @@ exports.signup = (req, res) => {
             res.status(200).json({message: "User registered successfully!"})
         });
       }).catch(err => {
-          res.status(500).json({error: err.message});
+          res.status(500).json({message: err.message});
       });  
 };
 //Sigin route

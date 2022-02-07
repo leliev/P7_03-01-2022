@@ -81,10 +81,11 @@ function ModifyUser(data) {
       //Send the data to server for update
       axios.put(process.env.REACT_APP_BASE_URL + `/user/${props.currentProfile.targetId}`, 
         prepData, { headers : { 'x-access-token': accessToken } 
-      }).then((res) => {
+      }).then(() => {
         //If success close form and activate refresh
-        props.func();
+        console.log(displayForm)
         toggleForm();
+        props.func();
       }).catch((error) => {
         //Or save error message in state to display
         props.error(error.response.data.message);
