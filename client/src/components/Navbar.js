@@ -14,7 +14,6 @@ function Navbar() {
     useEffect(() => {
         //Store location to display active navbar link
         setActive(activePath)
-        console.log(user)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[location])//Trigger specified rerender
 

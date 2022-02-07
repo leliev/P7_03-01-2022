@@ -7,3 +7,7 @@ body {
 #root {
     margin: 5px;
 }
+
+.disclaimer {
+    font-size: 1.2em;
+}

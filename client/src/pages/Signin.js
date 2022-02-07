@@ -36,7 +36,6 @@ function Signin() {
         if (res.data) {
           //Set token in session storage and navigate to home
           sessionStorage.setItem("accessToken", JSON.stringify(res.data.accessToken));
-          console.log("session:" + res.data.accessToken)
           window.location.replace('/');
         };
 

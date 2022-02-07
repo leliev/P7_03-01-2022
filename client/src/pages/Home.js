@@ -59,9 +59,12 @@ function Home() {
       {message && (
         <span className="error_response">{message}</span>
       )}
+      <h1>Welcome to home Page</h1>
+      <p className="disclaimer">Here you can view all articles, comment them and more if you are the author !!</p>
+      <p className="disclaimer">Click on an article to go to his page and like it.<br/>You can also click on article author and see more info about him !</p>
       <Create func={toggleRefresh}/>
       {articleList && (
-        <div className="articleWrapper">
+        <div className="listWrapper">
           {articleList.map((article, key) => {
 
             var data = {
@@ -69,35 +72,43 @@ function Home() {
               func: toggleRefresh
             };
             return (
-              <div className="articleCard" key={key}>
-
-                <div className="articleBody"  onClick={() => {
-                  navigate(`/article/${article.id}`)
-                }}>
-                  <h2>{article.title}</h2>
-                  <p>
-                    {article.content}
-                  </p>
-                </div>
-
-                <div className="articleFooter">
-                  <span>Likes : {article.like.value}</span>
-
-                  {article.userId ? (
-                    <span onClick={() => {
-                      navigate(`/user/${article.author}`)
-                    }}>
-                      Author : {article.author}
-                    </span>
-                  ) : (
-                    <span>
-                      Author (deleted): {article.author}
-                    </span>
+              <div className="articleWrapper" key={key}>
+                <div className="articleContainer">
+                  {article.imageUrl && (
+                  <img src={article.imageUrl} alt="article representation"/>
                   )}
+                  <div className="articleCard" >
+                    <div className="articleBody"  onClick={() => {
+                      navigate(`/article/${article.id}`)
+                      }}>
+                      <h2>{article.title}</h2>
+                      <p>
+                        {article.content}
+                      </p>
+                    </div>
 
-                  <span>Comments : {article.commentCount}</span>
+                    <div className="articleFooter">
+                      <span>Likes : {article.like.value}</span>
+
+                      {article.userId ? (
+                        <span className="author" onClick={() => {
+                          navigate(`/user/${article.author}`)
+                        }}>
+                          Author : {article.author}
+                        </span>
+                      ) : (
+                        <span>
+                          Author (deleted): {article.author}
+                        </span>
+                      )}
+
+                      <span>Comments : {article.commentCount}</span>
+                    </div>
+                  </div>
                 </div>
+                <div>
                 <ActionBar data={data} />
+                </div>
               </div>
             );
           })}

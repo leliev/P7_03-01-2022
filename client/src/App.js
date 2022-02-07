@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { UserContext } from "./helpers/userContext";
-//import { useLocation } from "react-router-dom";
 import axios from "axios";
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
@@ -23,7 +22,6 @@ function App() {
     const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
     //Check for token and logged state
     if ((accessToken !== null) && !userState.isLogged) {
-      console.log("setting context again")
       //get user data 
       axios.get(process.env.REACT_APP_BASE_URL + `/auth`, { headers : { 'x-access-token': accessToken } })
         .then((res) => {
@@ -45,7 +43,6 @@ function App() {
         isLogged: false,
       });
     };
-    console.log(userState)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 

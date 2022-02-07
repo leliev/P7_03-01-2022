@@ -7,7 +7,6 @@ Else we add the reference and increase the like value by one*/
 exports.manageLikes = (req, res) => {
   const articleId = req.params.id;
   const userId = req.body.id;
-  console.log("aId:"+articleId, "uId"+userId)
   //Get the like associated with the article
   Like.findOne({
     where: { articleId: articleId }

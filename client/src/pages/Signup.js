@@ -34,7 +34,6 @@ function Signup() {
   const onSubmit = (data) => {
     axios.post(process.env.REACT_APP_BASE_URL + "/auth/signup", data)
       .then((res) => {
-        console.log(res.data);
         //If submit successful display response and info
         if (res.data) {
           setMessage(res.data.message);

@@ -1,5 +1,6 @@
 const { authJwt, ownerOrAdmin } = require("../middleware");
 const controller = require("../controllers/comment.controller");
+const upload = require('../middleware/multer');
 
 module.exports = function(app) {
     app.use(function(req, res, next) {
@@ -21,6 +22,7 @@ module.exports = function(app) {
     );
     //Update a comment
     app.put("/api/comment/:id",
+        upload.single('image'),
         [authJwt.verifyToken, ownerOrAdmin],
         controller.updateComment
     );

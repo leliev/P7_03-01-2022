@@ -67,8 +67,7 @@ function Profile() {
     func: toggleRefresh,
     error: setMessage
   };
-
-  console.log("has privilege"+privilege, "isOwner:"+isOwner)
+  
   return (
     <>
       {message && (

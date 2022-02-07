@@ -1,26 +1,53 @@
 #article_create{
     margin-top: 5px;
 }
+.author {
+    cursor: pointer;
+}
+
+.listWrapper {
+    display: flex;
+    flex-direction: column-reverse;
+}
 
 .articleWrapper {
     width: 80%;
+    border-radius: 5px;
+    background-color: #fff;
+    border: 1px solid rgb(160, 160, 167);
     margin: auto;
+    padding: 5px;
+}
+
+.articleContainer {
     display: flex;
-    flex-direction: column-reverse;
+}
+
+.articleWrapper img {
+    max-height: 300px;
+    max-width: 100%;
+    border-radius: 5px;
+    border: 1px solid rgb(160, 160, 167);
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .actionbar {
     display: flex;
     justify-content: space-between;
+    padding-top: 5px;
 }
   
 .articleCard {
+    background-color: rgb(238, 238, 238);
     border-radius: 5px;
-    background-color: #fff;
-    border: 1px solid rgb(160, 160, 167);
-    margin: 5px;
-    padding: 5px;
-    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 5px;
+    padding-bottom: 5px;
+    font-size: 1.2em;
+    flex: 1;
 }
 
 .articleCard:hover {
@@ -30,23 +57,21 @@
 .articleBody {
     position: relative;
     font-size: 1.2em;
+    cursor: pointer;
 }
 
 .articleFooter {
     display: flex;
     background-color: beige;
     justify-content: space-between;
-    margin-bottom: 5px;
     padding: 0 5px;
-    font-size: 1.2em;
-  }
+}
   
-
 #like {
     position: absolute;
-    font-size: 1.2em;
-    left: 5px;
-    top: -20px;
+    font-size: 1em;
+    left: 10px;
+    top: 5px;
 }
 
 .commentCard {
@@ -69,4 +94,18 @@
     margin-bottom: 5px;
     padding: 0 5px;
     font-size: 1.2em;
+}
+@media screen and (max-width: 1200px) {
+    .articleContainer {
+        display: block;
+    }
+}
+@media screen and (max-width: 800px) {
+    .articleWrapper {
+        width: 90%;
+    }
+    
+    .commentCard {
+        width: 80%;
+    }
 }

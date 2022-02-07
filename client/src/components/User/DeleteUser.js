@@ -22,12 +22,9 @@ function DeleteUser(data) {
 
   const onClickDel = (value) => {
 
-    console.log("field value:" + JSON.stringify(value))
-    console.log(props.currentProfile)
     //Set params to send
     const payload = { "element": props.currentProfile.targetId, "user": user.id };
     const data = JSON.stringify(payload);
-    console.log("data:" +  data);
     //Send the delete user request
     axios.delete(URL + data, { headers : { 'x-access-token': accessToken } })
       .then(() => {

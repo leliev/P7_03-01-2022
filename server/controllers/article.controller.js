@@ -1,5 +1,7 @@
 const Sequelize  = require("sequelize");
 const db = require("../models");
+const fs = require("fs");
+const { article } = require("../models");
 const Article = db.article;
 const User = db.user;
 const Like = db.like;
@@ -143,15 +145,47 @@ exports.getArticleById = (req, res) => {
 };
 //Update article data
 exports.updateArticle = (req, res) => {
+  
     const reqId = req.params.id;
     const content = req.body.content;
+    let image;
+    let articleObject = {};
+
     //If no request content send error
     if (!content) {
       res.status(400).send({message: "Content required"});
+    } else {
+      articleObject = {
+        ...articleObject,
+        content: content
+      };
     };
+    //If image file in request
+    if (req.file) {
+
+      Article.findByPk(reqId).then((article) => {
+        //If old imageUrl not empty delete old image
+        if (article.imageUrl.length > 0) {
+          const filename = article.imageUrl.split('/images/')[1];
+          fs.unlink(`images/${filename}`, (err) => {
+            if (err) throw err;
+              console.log("deleted old image");
+          });
+        };
+      }).catch((err) => {
+        res.status(500).send({ message: err.message})
+      });
+      //Set new imageUrl with new filename in article object
+      image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+      articleObject = {
+        ...articleObject,
+        imageUrl: image
+      };
+    };
+    
     //Else save new data in database
     Article.update(
-        {content: content}, {
+        {...articleObject}, {
         where: { id: reqId }
     }).then(rows => {
         if (rows == 1) {
@@ -172,25 +206,39 @@ exports.updateArticle = (req, res) => {
 };
 //Delete one article by ID
 exports.deleteArticle = (req, res) => {
-    const data = JSON.parse(req.params.data);
-    const articleId = data.element;
+  const data = JSON.parse(req.params.data);
+  const articleId = data.element;
 
+  Article.findByPk(articleId).then((article) => {
+    //Delete image if present (imageUrl not empty)
+    if ((article.imageUrl === undefined) || (article.imageUrl.length > 0)) {
+      const filename = article.imageUrl.split('/images/')[1];
+      fs.unlink(`images/${filename}`, (err) => {
+        if (err) throw err;
+          console.log("deleted old image");
+      });
+    };
     Article.destroy({
-        where: { id: articleId }
+      where: { id: articleId }
     }).then(rows => {
-        if (rows == 1) {
-          res.status(200).send({
-            message: "Article was deleted successfully."
-          });
-        } else {
-          //Send error if no row affected
+          if (rows == 1) {
+            res.status(200).send({
+              message: "Article was deleted successfully."
+            });
+          } else {
+            //Send error if no row affected
+            res.status(500).send({
+              message: `Cannot delete article with id=${articleId}`
+            });
+          };
+      }).catch(err => {
           res.status(500).send({
-            message: `Cannot delete article with id=${articleId}`
+            message: err.message || "Error deleting article"
           });
-        };
-    }).catch(err => {
-        res.status(500).send({
-          message: err.message || "Error deleting article"
-        });
+      });
+  }).catch(err => {
+    res.status(500).send({
+      message: err.message || "Error deleting article"
     });
+  });
 };

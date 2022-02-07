@@ -29,7 +29,6 @@ verifyToken = (req, res, next) => {
                 case "DELETE":
                     console.log("delete route JWT")
                     if (req.params.data) {
-                        console.log("param route jwt" + req.params.data)
                         const data = req.params.data;
                         const userId = parseInt(data.user);
                         if (userId && userId !== decoded.id) {
@@ -51,7 +50,6 @@ verifyToken = (req, res, next) => {
                 case "POST":
                     console.log("put/post route JWT")
                     const id = parseInt(req.body.id)
-                    console.log("id from request:" + id)
                     if (id && id !== decoded.id) {
                         throw 'Invalid user ID';
                     } else {
@@ -67,7 +65,6 @@ verifyToken = (req, res, next) => {
 //Check for admin privileges
 isAdmin = (req, res, next) => {
     const userId = req.userId
-    console.log("isAdmin userId"+ userId + req.userId)
     User.findByPk(userId).then(user => {
         user.getRoles().then(roles => {
             for (let i = 0; i < roles.length; i++) {

@@ -70,20 +70,17 @@ function ModifyUser(data) {
       props.error("You must at least update one field!")
     } else {
       //Format the data to send with user ID and cleaned up object
-      console.log(payload)
       const prepData = new FormData();
       prepData.append('id', user.id);
       Object.keys(payload).map((key) => {
         prepData.append(key, payload[key])
         return prepData
       });
-      console.log(prepData)
       //Send the data to server for update
       axios.put(process.env.REACT_APP_BASE_URL + `/user/${props.currentProfile.targetId}`, 
         prepData, { headers : { 'x-access-token': accessToken } 
       }).then(() => {
         //If success close form and activate refresh
-        console.log(displayForm)
         toggleForm();
         props.func();
       }).catch((error) => {

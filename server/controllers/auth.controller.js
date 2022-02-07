@@ -10,7 +10,6 @@ const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$/;
 
 //Signup route
 exports.signup = (req, res) => {
-    console.log(req.body)
     const { username, email, password } = req.body;
     if (username == null || email == null || password == null) {
         return res.status(400).json({ message: 'Missing parameters' });
@@ -20,10 +19,13 @@ exports.signup = (req, res) => {
             message:
               'Password must be 6 - 18 characters long, at least one uppercase, one lowercase and one digit',
           });
-    }
+    };
     //Save into database
-    User.create({ ...user })
-      .then(user => {
+    User.create({
+        username: username,
+        email: email,
+        password: password
+    }).then(user => {
         user.setRoles([1]).then(() => {
             res.status(200).json({message: "User registered successfully!"})
         });

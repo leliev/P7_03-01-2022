@@ -72,9 +72,6 @@ input[type="file"] {
 }
 
 @media screen and (max-width: 1200px) {
-    .profileWrapper {
-        width: 80%;
-    }
     .userWrapper {
         flex-direction: column;
         align-content: center;
@@ -83,6 +80,13 @@ input[type="file"] {
     .profileThumb {
         width: 80%;
         margin-bottom: 10px;
+    }
+
+}
+
+@media screen and (max-width: 900px) {
+    .profileWrapper {
+        width: 80%;
     }
 
     .profileCard {

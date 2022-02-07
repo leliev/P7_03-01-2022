@@ -46,7 +46,7 @@ exports.updateUser = async (req, res) => {
   const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$/;
   try {
     const userId = parseInt(req.params.id);
-    const defaultUrl = 'http://localhost:8080/images/default_user.png';
+    const defaultUrl = process.env.URL_SERVER + '/images/default_user.png';
     let image;
     let userObject = {};
     const user = await User.findByPk(userId);
@@ -58,7 +58,6 @@ exports.updateUser = async (req, res) => {
       //filename are unique even if uploaded file are the same.
       if (user.imageUrl !== defaultUrl) {
         const filename = user.imageUrl.split('/images/')[1];
-        console.log("old filename:"+filename)
         fs.unlink(`images/${filename}`, (err) => {
           if (err) throw err;
           console.log("deleted old image");
@@ -90,6 +89,7 @@ exports.updateUser = async (req, res) => {
         email: req.body.email
       }
     };
+    //If password is changed check old password with user database info 
     if (req.body.password) {
       var passwordIsValid = bcrypt.compareSync(req.body.old_password, user.password);
       if (!passwordIsValid) {
@@ -107,34 +107,11 @@ exports.updateUser = async (req, res) => {
         userObject = {
           ...userObject,
           password: req.body.password
-        }
-      }
-    }
-    //beforeUpdate hook not triggering in models to change
-    //If password is changed check old password with user database info 
-    /*if (req.body.password) {
-      var passwordIsValid = bcrypt.compareSync(req.body.old_password, user.password);
-      if (!passwordIsValid) {
-        return res.status(401).json({
-            accessToken: null,
-            message: "Invalid Password!"
-        });
+        };
       };
     };
-    User.update({ password: req.body.password }, { where: { id: user.id }}).then(rows => {
-      if (rows == 1) {
-        res.status(200).send({
-          message: "User was updated successfully."
-        });
-      } else {
-        res.status(500).send({
-          message: `Cannot update user with id=${id}(data)`
-        });
-      };
-    });*/
     //Update user if data were provided
     if (Object.keys(userObject).length !== 0) {
-      console.log("new user data:" + Object.keys(userObject).length)
       User.update({ ...userObject }, { where: { id: user.id } }).then(rows => {
         if (rows !== 0) {
           res.status(200).send({
@@ -188,8 +165,7 @@ exports.getUserByName = (req, res) => {
 exports.userDelete = (req, res) => {
   const data = JSON.parse(req.params.data);
   const targetId = data.element;
-  const defaultUrl = 'http://localhost:8080/images/default_user.png';
-  console.log(targetId)
+  const defaultUrl = process.env.URL_SERVER + '/images/default_user.png';
     
   User.findByPk(targetId).then(user => {
     //If no user corresponding found 
@@ -199,7 +175,6 @@ exports.userDelete = (req, res) => {
     //if target user image url is not default delete image file
     if (user.imageUrl !== defaultUrl) {
       const filename = user.imageUrl.split('/images/')[1];
-      console.log("old filename:"+filename)
       fs.unlink(`images/${filename}`, (err) => {
         if (err) throw err;
         console.log("deleted old image");

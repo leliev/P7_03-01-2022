@@ -84,7 +84,6 @@ exports.deleteComment = (req, res) => {
   const data = JSON.parse(req.params.data);
   const commentId = data.element;
   
-
     Comment.destroy({
         where: {id: commentId}
     }).then(rows => {

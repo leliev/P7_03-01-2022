@@ -46,10 +46,10 @@ function Admin() {
       <div className="userWrapper">
         {userList.map((user, key) => {
           return (
-            <div className="profileThumb">
+            <div className="profileThumb" key={key}>
               <div className="profileCard">
                 <img src={user.imageUrl} alt="user profile"/>
-                <div className="userCard" key={key} onClick={() => {navigate(`/user/${user.username}`)}}>
+                <div className="userCard" onClick={() => {navigate(`/user/${user.username}`)}}>
                   <div className="userBody">
                     <h2>{user.username}</h2>
                     <span><b>Email</b> : {user.email}</span>

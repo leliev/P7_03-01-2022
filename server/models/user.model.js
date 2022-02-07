@@ -22,9 +22,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false,
             set(value) {
-                console.log(value)
                 const hash = bcrypt.hashSync(value, 10);
-                console
                 this.setDataValue('password', hash)
             }
         },
@@ -35,7 +33,7 @@ module.exports = (sequelize, Sequelize) => {
             }
         },
         /*{
-            //We encrypt the password before saving in database via the model
+            //beforeBulkUpdate not triggering ....have to search
             hooks: {
                 beforeCreate: async (user) => {
                     if (user.password) {

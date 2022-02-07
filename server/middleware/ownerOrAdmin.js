@@ -5,7 +5,6 @@ const Article = db.article;
 module.exports = (req, res, next) => {
   let userId = 0;
   let elementId = 0;
-  console.log("method OwnerOrAdmin:"+req.method )
   
   //Evaluates the request method for corresponding variables setting
   switch (req.method) {

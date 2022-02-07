@@ -43,7 +43,6 @@ function Article() {
           const comments = currentArticle.comments;
           setCommentList(comments);
 
-          console.log(res.data.article)
         }).catch((error) => {
           //Or save error message in state to display
           setMessage(error.response.data.message);
@@ -76,42 +75,42 @@ function Article() {
   };
   return (
     <div>
-      <Create func={toggleRefresh}/>
-      <div className="articleCard">
-
-        {message && (
+      {message && (
           <span className="error_response">{message}</span>
-        )}
-
-        <div className="articleBody">
-        <button id="like" onClick={handleClick} className={liked ? "base_form_closebtn" : "base_form_button"} >{liked ? "Unlike" : "Like"}</button>
-          <h2>{article.title}</h2>
-          <p>
-            {article.content}
-          </p>
-        </div>
-
-        <div className="articleFooter">
-
-          <span>Likes : {article.like ? article.like.value : 0}</span>
-    
-          {article.userId ? (
-            <span onClick={() => {
-              navigate(`/user/${article.author}`)
-            }}>
-              Author : {article.author}
-            </span>
-          ) : (
-            <span>
-              Author (deleted): {article.author}
-            </span>
+      )}
+      <Create func={toggleRefresh}/>
+      <div className="articleWrapper">
+        <div className="articleContainer">
+          {article.imageUrl && (
+            <img src={article.imageUrl} alt="article representation"/>
           )}
-      
-          <span>Comments : {article.comments ? article.comments.length : 0 }</span>
+          <div className="articleCard">
+            <div className="articleBody">
+              <button id="like" onClick={handleClick} className={liked ? "base_form_closebtn" : "base_form_button"} >{liked ? "Unlike" : "Like"}</button>
+              <h2>{article.title}</h2>
+              <p>
+                {article.content}
+              </p>
+            </div>
+            <div className="articleFooter">
+              <span>Likes : {article.like ? article.like.value : 0}</span>
+              {article.userId ? (
+                <span className="author" onClick={() => {
+                  navigate(`/user/${article.author}`)
+                }}>
+                  Author : {article.author}
+                </span>
+              ) : (
+                <span>
+                  Author (deleted): {article.author}
+                </span>
+              )}
+              <span>Comments : {article.comments ? article.comments.length : 0 }</span>
+            </div>
+          </div>
         </div>
-
         <div>
-          <ActionBar data={data}/>
+            <ActionBar data={data}/>
         </div>
       </div>
 
