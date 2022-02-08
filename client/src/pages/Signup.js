@@ -61,7 +61,7 @@ function Signup() {
           onSubmit={onSubmit}
         >
           <Form className="base_form">
-            <h1>Créer un compte</h1>
+            <h1>Account creation</h1>
             <img src={icon} alt="Logo groupomania rouge simple"/>
             <label htmlFor="username">Name : </label>
             <Field

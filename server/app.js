@@ -21,7 +21,7 @@ db.sequelize.sync().then(() => {
   console.log("db connection success")
 }).catch((err) => {
   console.log(err.message)
-})
+});
 
 //For dev
 /*db.sequelize.sync({force: true}).then(() => {

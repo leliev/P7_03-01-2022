@@ -61,7 +61,7 @@ function ActionBar(props) {
         <>
           <Modify data={data}/>
           <div>
-            <button onClick={onClickDel}className="popup_form_closebtn">delete</button>
+            <button onClick={onClickDel}className="popup_form_closebtn">Delete</button>
           </div>
         </>
       ) : (
