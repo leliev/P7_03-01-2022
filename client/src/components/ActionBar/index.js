@@ -36,9 +36,14 @@ function ActionBar(props) {
     const data = JSON.stringify(payload);
     axios.delete(URL + data, { headers : { 'x-access-token': accessToken } })
       .then(() => {
+        if (target === "article") {
+          navigate("/");
+        } else {
+          props.data.func();
+        }
         //Initiate parent refresh
-        props.data.func();
-        navigate("/");
+        
+        
       }).catch((error) => {
         //Or log the error
         console.log(error.response.data.message);
