@@ -37,6 +37,7 @@ function ActionBar(props) {
     axios.delete(URL + data, { headers : { 'x-access-token': accessToken } })
       .then(() => {
         if (target === "article") {
+          props.data.func();
           navigate("/");
         } else {
           props.data.func();
