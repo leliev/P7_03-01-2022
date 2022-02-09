@@ -8,6 +8,8 @@
 2. Create a new schema (for example : groupomania)
 3. Create a .env file in the root folder with the username and the password which you use to connect to your database, then modify the name of the database by the name of the schema that you have previously created.
 
+Or you can modify the .env.local server file and the corresponding values.
+
 ## SERVER
 
 1. Full list of required .env file properties
@@ -18,6 +20,7 @@
 - DB_PASS
 - DB=(DB name)
 - DB_DIALECT
+- DB_PORT
 - TKEY=(token key)
 - URL_SERVER
 - URL_CLIENT
