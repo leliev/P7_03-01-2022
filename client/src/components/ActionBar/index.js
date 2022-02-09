@@ -1,5 +1,6 @@
 import React, {useContext} from "react";
 import { UserContext } from "../../helpers/userContext";
+import {useNavigate} from "react-router-dom"
 import axios from "axios";
 import Modify from "./Modify";
 import Create from "../Comment/Create";
@@ -8,6 +9,7 @@ function ActionBar(props) {
 
   const accessToken = JSON.parse(sessionStorage.getItem("accessToken"));
   const {userState} = useContext(UserContext);
+  const navigate = useNavigate();
   const user = userState;
   const element = props.data.element;
   //Check context user data for admin privilege
@@ -36,6 +38,7 @@ function ActionBar(props) {
       .then(() => {
         //Initiate parent refresh
         props.data.func();
+        navigate("/");
       }).catch((error) => {
         //Or log the error
         console.log(error.response.data.message);
