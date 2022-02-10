@@ -94,7 +94,7 @@ exports.getUserArticles = (req, res) => {
         },
       include: [{model:Like, attributes: ["id", "value"]},
         {model: Comment, attributes: []}],
-      group: ['comments.articleId']
+      group: ['id']
     }).then(articleList => {
         if (articleList.length === 0 || !articleList) {
             res.status(200).send({ message: "No articles to display"} )
