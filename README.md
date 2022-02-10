@@ -32,5 +32,5 @@ Or you can modify the .env.local server file and the corresponding values.
 
 1. npm install in the client folder.
 2. Create a .env.local file in the client root folder and type
-- REACT_APP_BASE_URL=(server port).
+- REACT_APP_BASE_URL=(http://localhost:8080/api).
 3. Type npm start from the client folder in the terminal to start the react App.
